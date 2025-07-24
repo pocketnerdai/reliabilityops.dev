@@ -11,6 +11,9 @@ import { urlForImage } from '../../sanity/lib/image';
 // Fetch posts from Sanity
 const posts = await client.fetch(postsQuery);
 
+// Ensure fresh content
+Astro.response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+
 // Calculate read time
 const calculateReadTime = (content: any) => {
   // Rough estimate based on content length
