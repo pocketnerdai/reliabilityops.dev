@@ -1,0 +1,173 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const pageTitle = `Case Studies - ${SITE_TITLE}`;
+const pageDescription = "Real-world examples of AI-driven reliability engineering preventing outages and saving millions.";
+
+const caseStudies = [
+	{
+		company: "Wells Fargo",
+		title: "Preventing $2M in Losses Through Predictive Analytics",
+		impact: "$2M+ Saved",
+		metrics: {
+			alertReduction: "97%",
+			mttrImprovement: "75%",
+			uptimeAchieved: "99.99%"
+		},
+		description: "Implemented AI-driven anomaly detection that predicted database connection pool exhaustion 25 minutes before impact, preventing a 3-hour outage during critical batch processing.",
+		tags: ["Financial Services", "AI/ML", "Predictive Analytics"],
+		link: "/blog/ai-prevented-2m-losses"
+	},
+	{
+		company: "Fox Sports",
+		title: "Scaling Reliability for 100M+ Live Stream Viewers",
+		impact: "Zero Downtime During Super Bowl",
+		metrics: {
+			peakTraffic: "100M+ concurrent",
+			latencyReduction: "67%",
+			incidentPrevention: "23 major"
+		},
+		description: "Built self-healing infrastructure that automatically scaled and remediated issues during peak sporting events, ensuring flawless streaming experience for millions.",
+		tags: ["Media", "Live Streaming", "Auto-scaling"],
+		featured: true
+	},
+	{
+		company: "Major E-commerce Platform",
+		title: "Black Friday Success Through AIOps",
+		impact: "300% Traffic Handled",
+		metrics: {
+			revenueProtected: "$15M",
+			performanceGain: "45%",
+			customerSatisfaction: "98%"
+		},
+		description: "Deployed pattern recognition system that preemptively identified and resolved bottlenecks, enabling record-breaking Black Friday sales without any incidents.",
+		tags: ["E-commerce", "Pattern Recognition", "Peak Events"]
+	}
+];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- Hero Section -->
+			<section class="bg-gradient-to-b from-slate-900 to-slate-800 py-20">
+				<div class="container mx-auto px-4">
+					<div class="max-w-4xl mx-auto text-center">
+						<h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
+							Proven Results at Scale
+						</h1>
+						<p class="text-xl text-slate-300">
+							Real-world implementations saving millions through predictive reliability
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- Case Studies Grid -->
+			<section class="py-20 bg-slate-900">
+				<div class="container mx-auto px-4">
+					<div class="grid gap-8">
+						{caseStudies.map((study) => (
+							<article class={`${study.featured ? 'lg:col-span-2' : ''} bg-slate-800 rounded-xl overflow-hidden hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300`}>
+								<div class="p-8">
+									<div class="flex flex-wrap items-center justify-between mb-4">
+										<h2 class="text-2xl font-bold text-white">{study.company}</h2>
+										<span class="text-emerald-400 font-semibold text-lg">{study.impact}</span>
+									</div>
+									
+									<h3 class="text-xl text-slate-200 mb-4">{study.title}</h3>
+									
+									<p class="text-slate-400 mb-6">{study.description}</p>
+									
+									<!-- Metrics -->
+									<div class="grid grid-cols-3 gap-4 mb-6">
+										{Object.entries(study.metrics).map(([key, value]) => (
+											<div class="text-center">
+												<div class="text-2xl font-bold text-emerald-400">{value}</div>
+												<div class="text-sm text-slate-500 capitalize">
+													{key.replace(/([A-Z])/g, ' $1').trim()}
+												</div>
+											</div>
+										))}
+									</div>
+									
+									<!-- Tags -->
+									<div class="flex flex-wrap gap-2 mb-6">
+										{study.tags.map((tag) => (
+											<span class="px-3 py-1 bg-slate-700 text-slate-300 text-sm rounded-full">
+												{tag}
+											</span>
+										))}
+									</div>
+									
+									{study.link && (
+										<a href={study.link} class="inline-flex items-center text-emerald-400 hover:text-emerald-300 font-medium">
+											Read Full Case Study
+											<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+											</svg>
+										</a>
+									)}
+								</div>
+							</article>
+						))}
+					</div>
+				</div>
+			</section>
+
+			<!-- Results Summary -->
+			<section class="py-20 bg-slate-800">
+				<div class="container mx-auto px-4">
+					<h2 class="text-3xl font-bold text-white text-center mb-12">
+						Combined Impact Across All Implementations
+					</h2>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+						<div class="text-center">
+							<div class="text-4xl font-bold text-emerald-400 mb-2">$25M+</div>
+							<div class="text-slate-400">Total Saved</div>
+						</div>
+						<div class="text-center">
+							<div class="text-4xl font-bold text-emerald-400 mb-2">99.99%</div>
+							<div class="text-slate-400">Average Uptime</div>
+						</div>
+						<div class="text-center">
+							<div class="text-4xl font-bold text-emerald-400 mb-2">85%</div>
+							<div class="text-slate-400">Incident Reduction</div>
+						</div>
+						<div class="text-center">
+							<div class="text-4xl font-bold text-emerald-400 mb-2">3x</div>
+							<div class="text-slate-400">ROI Average</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- CTA Section -->
+			<section class="py-20 bg-gradient-to-r from-emerald-600 to-emerald-700">
+				<div class="container mx-auto px-4 text-center">
+					<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+						Ready to Write Your Success Story?
+					</h2>
+					<p class="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
+						Let's discuss how AI-driven reliability can transform your infrastructure
+					</p>
+					<a href="/contact" class="btn-primary bg-white text-emerald-600 hover:bg-gray-100">
+						Schedule a Consultation
+						<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+						</svg>
+					</a>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

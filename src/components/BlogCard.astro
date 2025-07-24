@@ -1,0 +1,47 @@
+---
+export interface Props {
+  title: string;
+  excerpt: string;
+  date: Date;
+  slug: string;
+  tags?: string[];
+  readTime?: number;
+}
+
+const { title, excerpt, date, slug, tags = [], readTime = 5 } = Astro.props;
+import FormattedDate from './FormattedDate.astro';
+---
+
+<article class="blog-card">
+  <div class="flex items-start justify-between mb-4">
+    <FormattedDate date={date} class="text-sm text-slate-400" />
+    <span class="text-sm text-emerald-400">{readTime} min read</span>
+  </div>
+  
+  <h3 class="text-xl font-bold mb-3 group-hover:text-emerald-400 transition-colors">
+    <a href={`/blog/${slug}`} class="hover:text-emerald-400">
+      {title}
+    </a>
+  </h3>
+  
+  <p class="text-slate-300 mb-4 line-clamp-2">{excerpt}</p>
+  
+  <div class="flex items-center justify-between">
+    <div class="flex gap-2 flex-wrap">
+      {tags.map(tag => (
+        <span class="text-xs bg-slate-700 px-2 py-1 rounded">
+          {tag}
+        </span>
+      ))}
+    </div>
+    <a 
+      href={`/blog/${slug}`} 
+      class="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1 text-sm font-medium"
+    >
+      Read more
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+      </svg>
+    </a>
+  </div>
+</article>

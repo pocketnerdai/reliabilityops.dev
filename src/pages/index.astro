@@ -2,14 +2,21 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_TAGLINE, METRICS, AUTHOR_BIO } from '../consts';
-import FormattedDate from '../components/FormattedDate.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
 
 // Get latest blog posts
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 ).slice(0, 3);
+
+// Calculate read time (rough estimate)
+const calculateReadTime = (content: string) => {
+	const wordsPerMinute = 200;
+	const words = content.split(/\s+/).length;
+	return Math.ceil(words / wordsPerMinute);
+};
 ---
 
 <!doctype html>
@@ -21,158 +28,158 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<!-- Hero Section -->
-			<section class="relative overflow-hidden bg-gradient-hero">
-				<div class="absolute inset-0 bg-gradient-to-r from-navy-900/90 to-navy-800/90"></div>
-				<div class="relative container-custom section-padding">
-					<div class="max-w-4xl mx-auto text-center animate-in">
-						<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-							<span class="text-gradient">{SITE_TAGLINE}</span>
+			<section class="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 relative overflow-hidden">
+				<!-- Background gradient effect -->
+				<div class="absolute inset-0 bg-gradient-hero opacity-50"></div>
+				
+				<!-- Content -->
+				<div class="container mx-auto px-4 py-20 relative z-10">
+					<div class="max-w-4xl mx-auto text-center">
+						<!-- Main headline -->
+						<h1 class="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
+							Preventing Outages Before They Happen
 						</h1>
-						<p class="text-xl md:text-2xl text-navy-300 mb-8">
-							Military-trained SRE combining <span class="text-military-green font-semibold">15+ years</span> of operational excellence 
-							with cutting-edge AI to deliver <span class="text-accent-blue font-semibold">99.99%+ uptime</span>
+						
+						<!-- Subheadline -->
+						<p class="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto animate-fade-in" style="animation-delay: 0.2s;">
+							Military-trained SRE combining 15+ years of operational excellence 
+							with cutting-edge AI to deliver 99.99%+ uptime
 						</p>
 						
-						<!-- Metrics Row -->
-						<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-							<div class="card-glass text-center animate-up" style="animation-delay: 0.1s">
-								<div class="text-3xl md:text-4xl font-bold text-military-green">{METRICS.saved}</div>
-								<div class="text-sm text-navy-400">Saved</div>
+						<!-- Metrics Grid -->
+						<div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+							<div class="card-glass animate-slide-up" style="animation-delay: 0.3s;">
+								<div class="text-3xl font-bold text-emerald-400">$2.8M+</div>
+								<div class="text-slate-400">Saved</div>
 							</div>
-							<div class="card-glass text-center animate-up" style="animation-delay: 0.2s">
-								<div class="text-3xl md:text-4xl font-bold text-accent-blue">{METRICS.uptime}</div>
-								<div class="text-sm text-navy-400">Uptime Achieved</div>
+							<div class="card-glass animate-slide-up" style="animation-delay: 0.4s;">
+								<div class="text-3xl font-bold text-emerald-400">99.99%</div>
+								<div class="text-slate-400">Uptime</div>
 							</div>
-							<div class="card-glass text-center animate-up" style="animation-delay: 0.3s">
-								<div class="text-3xl md:text-4xl font-bold text-accent-orange">{METRICS.improvement}</div>
-								<div class="text-sm text-navy-400">Reliability Improvement</div>
+							<div class="card-glass animate-slide-up" style="animation-delay: 0.5s;">
+								<div class="text-3xl font-bold text-emerald-400">67%</div>
+								<div class="text-slate-400">Faster Recovery</div>
 							</div>
-							<div class="card-glass text-center animate-up" style="animation-delay: 0.4s">
-								<div class="text-3xl md:text-4xl font-bold text-military-green-light">{METRICS.experience}</div>
-								<div class="text-sm text-navy-400">Years Experience</div>
+							<div class="card-glass animate-slide-up" style="animation-delay: 0.6s;">
+								<div class="text-3xl font-bold text-emerald-400">15+</div>
+								<div class="text-slate-400">Years Experience</div>
 							</div>
 						</div>
 						
 						<!-- CTAs -->
-						<div class="flex flex-col sm:flex-row gap-4 justify-center">
-							<a href="/tools" class="btn btn-primary">
-								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-								</svg>
+						<div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in" style="animation-delay: 0.7s;">
+							<a href="/tools" class="btn-primary">
 								Explore AIOps Tools
-							</a>
-							<a href="/blog" class="btn btn-outline">
-								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+								<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
 								</svg>
+							</a>
+							<a href="/case-studies" class="btn-secondary">
 								Read Case Studies
 							</a>
 						</div>
 					</div>
 				</div>
+				
+				<!-- Scroll indicator -->
+				<div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+					<svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+					</svg>
+				</div>
 			</section>
 
-			<!-- Value Propositions -->
-			<section class="container-custom section-padding">
-				<h2 class="text-4xl font-bold text-center mb-12">Transforming Reactive Ops into <span class="text-gradient">Predictive Reliability</span></h2>
-				
-				<div class="grid md:grid-cols-3 gap-8">
-					<div class="card group hover:scale-105 transition-transform duration-300">
-						<div class="flex items-center mb-4">
-							<div class="w-12 h-12 bg-military-green/20 rounded-lg flex items-center justify-center mr-4">
-								<svg class="w-6 h-6 text-military-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+			<!-- Value Proposition Section -->
+			<section class="py-20 bg-slate-900">
+				<div class="container mx-auto px-4">
+					<div class="text-center mb-12">
+						<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+							Proactive Reliability Through Predictive Intelligence
+						</h2>
+						<p class="text-xl text-slate-300 max-w-2xl mx-auto">
+							Transform your operations from reactive firefighting to proactive prevention
+						</p>
+					</div>
+					
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+						<div class="text-center">
+							<div class="w-16 h-16 bg-emerald-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+								<svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
 								</svg>
 							</div>
-							<h3 class="text-xl font-semibold">Military-Grade Reliability</h3>
+							<h3 class="text-xl font-semibold text-white mb-3">AI-Driven Analytics</h3>
+							<p class="text-slate-400">
+								Pattern recognition and anomaly detection that catches issues 30+ minutes before impact
+							</p>
 						</div>
-						<p class="text-navy-400 mb-4">
-							Battlefield-tested operational discipline meets modern SRE practices. Every system architected for resilience, every process optimized for zero downtime.
-						</p>
-						<div class="badge badge-success">
-							<span class="status-active">97% Alert Reduction</span>
-						</div>
-					</div>
-
-					<div class="card group hover:scale-105 transition-transform duration-300">
-						<div class="flex items-center mb-4">
-							<div class="w-12 h-12 bg-accent-blue/20 rounded-lg flex items-center justify-center mr-4">
-								<svg class="w-6 h-6 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						
+						<div class="text-center">
+							<div class="w-16 h-16 bg-emerald-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+								<svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
 								</svg>
 							</div>
-							<h3 class="text-xl font-semibold">AI-Powered Predictions</h3>
+							<h3 class="text-xl font-semibold text-white mb-3">Military Precision</h3>
+							<p class="text-slate-400">
+								Battle-tested operational discipline ensuring nothing falls through the cracks
+							</p>
 						</div>
-						<p class="text-navy-400 mb-4">
-							Machine learning models analyze patterns across millions of data points, predicting failures before they occur and automating remediation.
-						</p>
-						<div class="badge badge-info">
-							<span>Prevents Issues Before Impact</span>
-						</div>
-					</div>
-
-					<div class="card group hover:scale-105 transition-transform duration-300">
-						<div class="flex items-center mb-4">
-							<div class="w-12 h-12 bg-accent-orange/20 rounded-lg flex items-center justify-center mr-4">
-								<svg class="w-6 h-6 text-accent-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						
+						<div class="text-center">
+							<div class="w-16 h-16 bg-emerald-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+								<svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
 								</svg>
 							</div>
-							<h3 class="text-xl font-semibold">Proven ROI</h3>
-						</div>
-						<p class="text-navy-400 mb-4">
-							Documented savings of $2.8M+ through prevented outages and optimized infrastructure. Every solution designed for measurable business impact.
-						</p>
-						<div class="badge badge-warning">
-							<span>$800K Annual Cost Reduction</span>
+							<h3 class="text-xl font-semibold text-white mb-3">Proven ROI</h3>
+							<p class="text-slate-400">
+								Average 3x return on investment within 6 months through prevented outages
+							</p>
 						</div>
 					</div>
 				</div>
 			</section>
 
-			<!-- Latest Content -->
-			<section class="bg-navy-800/50">
-				<div class="container-custom section-padding">
-					<div class="flex justify-between items-center mb-12">
-						<h2 class="text-4xl font-bold">Latest <span class="text-gradient">Insights</span></h2>
-						<a href="/blog" class="text-military-green hover:text-military-green-light transition-colors">
+			<!-- Latest Blog Posts -->
+			<section class="py-20 bg-slate-800">
+				<div class="container mx-auto px-4">
+					<div class="flex justify-between items-center mb-8">
+						<h2 class="text-3xl font-bold text-white">Latest Insights</h2>
+						<a href="/blog" class="text-emerald-400 hover:text-emerald-300 transition-colors">
 							View all posts →
 						</a>
 					</div>
 					
-					<div class="grid md:grid-cols-3 gap-8">
+					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						{posts.map((post) => (
-							<article class="card group hover:border-military-green/50 transition-all duration-300">
-								<a href={`/blog/${post.slug}/`} class="block">
-									<h3 class="text-xl font-semibold mb-2 group-hover:text-military-green transition-colors">
-										{post.data.title}
-									</h3>
-									<p class="text-navy-400 mb-4 line-clamp-3">
-										{post.data.description}
-									</p>
-									<div class="flex items-center justify-between text-sm">
-										<FormattedDate date={post.data.pubDate} />
-										<span class="text-military-green">Read more →</span>
-									</div>
-								</a>
-							</article>
+							<BlogCard
+								title={post.data.title}
+								excerpt={post.data.description}
+								date={post.data.pubDate}
+								slug={post.slug}
+								readTime={calculateReadTime(post.body)}
+								tags={['SRE', 'AI']}
+							/>
 						))}
 					</div>
 				</div>
 			</section>
 
 			<!-- CTA Section -->
-			<section class="container-custom section-padding text-center">
-				<h2 class="text-4xl font-bold mb-6">Ready to Transform Your Operations?</h2>
-				<p class="text-xl text-navy-300 mb-8 max-w-2xl mx-auto">
-					Join thousands of SREs using AI-powered tools to achieve unprecedented reliability
-				</p>
-				<div class="flex flex-col sm:flex-row gap-4 justify-center">
-					<a href="/tools" class="btn btn-primary">
-						Start with Free Tools
-					</a>
-					<a href="/about" class="btn btn-outline">
-						Learn About My Approach
+			<section class="py-20 bg-gradient-to-r from-emerald-600 to-emerald-700">
+				<div class="container mx-auto px-4 text-center">
+					<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+						Ready to Achieve 99.99% Uptime?
+					</h2>
+					<p class="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
+						Let's discuss how AI-driven reliability can transform your operations
+					</p>
+					<a href="/contact" class="btn-primary bg-white text-emerald-600 hover:bg-gray-100">
+						Get Started
+						<svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+						</svg>
 					</a>
 				</div>
 			</section>
@@ -180,236 +187,3 @@ const posts = (await getCollection('blog')).sort(
 		<Footer />
 	</body>
 </html>
-
-<style>
-	.hero-section {
-		position: relative;
-		overflow: hidden;
-		background: linear-gradient(to bottom, var(--color-navy-900), var(--color-navy-800));
-	}
-	
-	.hero-overlay {
-		position: absolute;
-		inset: 0;
-		background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
-	}
-	
-	.hero-content {
-		max-width: 56rem;
-		margin: 0 auto;
-		text-align: center;
-		position: relative;
-	}
-	
-	.hero-title {
-		font-size: clamp(3rem, 6vw, 5rem);
-		font-weight: bold;
-		margin-bottom: 1.5rem;
-	}
-	
-	.hero-subtitle {
-		font-size: clamp(1.25rem, 3vw, 1.5rem);
-		color: #CBD5E1;
-		margin-bottom: 2rem;
-	}
-	
-	.highlight-green {
-		color: var(--color-military-green);
-		font-weight: 600;
-	}
-	
-	.highlight-blue {
-		color: var(--color-accent-blue);
-		font-weight: 600;
-	}
-	
-	.metrics-grid {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1rem;
-		margin-bottom: 3rem;
-	}
-	
-	@media (min-width: 768px) {
-		.metrics-grid {
-			grid-template-columns: repeat(4, 1fr);
-		}
-	}
-	
-	.metric-value {
-		font-size: clamp(1.875rem, 4vw, 2.5rem);
-		font-weight: bold;
-	}
-	
-	.metric-green { color: var(--color-military-green); }
-	.metric-blue { color: var(--color-accent-blue); }
-	.metric-orange { color: var(--color-accent-orange); }
-	.metric-green-light { color: var(--color-military-green-light); }
-	
-	.metric-label {
-		font-size: 0.875rem;
-		color: var(--color-navy-400);
-	}
-	
-	.cta-buttons {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
-		justify-content: center;
-		align-items: center;
-	}
-	
-	@media (min-width: 640px) {
-		.cta-buttons {
-			flex-direction: row;
-		}
-	}
-	
-	.icon {
-		width: 1.25rem;
-		height: 1.25rem;
-	}
-	
-	.section-title {
-		font-size: 2.5rem;
-		font-weight: bold;
-		margin-bottom: 3rem;
-	}
-	
-	.section-title.text-center {
-		text-align: center;
-	}
-	
-	.features-grid, .posts-grid {
-		display: grid;
-		gap: 2rem;
-	}
-	
-	@media (min-width: 768px) {
-		.features-grid, .posts-grid {
-			grid-template-columns: repeat(3, 1fr);
-		}
-	}
-	
-	.feature-card {
-		transition: transform 300ms;
-	}
-	
-	.feature-card:hover {
-		transform: scale(1.05);
-	}
-	
-	.feature-header {
-		display: flex;
-		align-items: center;
-		margin-bottom: 1rem;
-	}
-	
-	.feature-icon-box {
-		width: 3rem;
-		height: 3rem;
-		border-radius: 0.5rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-right: 1rem;
-	}
-	
-	.feature-icon-box.green { background-color: rgba(16, 185, 129, 0.2); }
-	.feature-icon-box.blue { background-color: rgba(59, 130, 246, 0.2); }
-	.feature-icon-box.orange { background-color: rgba(245, 158, 11, 0.2); }
-	
-	.feature-icon {
-		width: 1.5rem;
-		height: 1.5rem;
-	}
-	
-	.feature-icon.green { color: var(--color-military-green); }
-	.feature-icon.blue { color: var(--color-accent-blue); }
-	.feature-icon.orange { color: var(--color-accent-orange); }
-	
-	.feature-title, .post-title {
-		font-size: 1.25rem;
-		font-weight: 600;
-	}
-	
-	.feature-description, .post-description {
-		color: var(--color-navy-400);
-		margin-bottom: 1rem;
-	}
-	
-	.latest-content-section {
-		background-color: rgba(30, 41, 59, 0.5);
-	}
-	
-	.section-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 3rem;
-	}
-	
-	.view-all-link {
-		color: var(--color-military-green);
-		transition: color 200ms;
-	}
-	
-	.view-all-link:hover {
-		color: var(--color-military-green-light);
-	}
-	
-	.post-card {
-		transition: all 300ms;
-	}
-	
-	.post-card:hover {
-		border-color: rgba(16, 185, 129, 0.5);
-	}
-	
-	.post-link {
-		display: block;
-		text-decoration: none;
-		color: inherit;
-	}
-	
-	.post-card:hover .post-title {
-		color: var(--color-military-green);
-	}
-	
-	.post-description {
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
-	
-	.post-meta {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		font-size: 0.875rem;
-	}
-	
-	.read-more {
-		color: var(--color-military-green);
-	}
-	
-	.cta-section {
-		text-align: center;
-	}
-	
-	.cta-title {
-		font-size: 2.5rem;
-		font-weight: bold;
-		margin-bottom: 1.5rem;
-	}
-	
-	.cta-subtitle {
-		font-size: 1.25rem;
-		color: #CBD5E1;
-		margin-bottom: 2rem;
-		max-width: 42rem;
-		margin-left: auto;
-		margin-right: auto;
-	}
-</style>
