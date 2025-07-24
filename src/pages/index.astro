@@ -157,7 +157,7 @@ const calculateReadTime = (content: string) => {
 								title={post.data.title}
 								excerpt={post.data.description}
 								date={post.data.pubDate}
-								slug={post.slug}
+								slug={post.id}
 								readTime={calculateReadTime(post.body)}
 								tags={['SRE', 'AI']}
 							/>
