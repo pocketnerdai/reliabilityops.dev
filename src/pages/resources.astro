@@ -1,0 +1,149 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const pageTitle = `Resources - ${SITE_TITLE}`;
+const pageDescription = "Curated resources, guides, and tools for Site Reliability Engineers.";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="container-custom section-padding">
+				<div class="page-header">
+					<h1 class="page-title">SRE Resources</h1>
+					<p class="page-subtitle">
+						Curated collection of tools, guides, and best practices for reliability engineering.
+					</p>
+				</div>
+				
+				<div class="resources-grid">
+					<div class="resource-category">
+						<h2>Essential Reading</h2>
+						<ul class="resource-list">
+							<li><a href="https://sre.google/sre-book/table-of-contents/" target="_blank">Google SRE Book</a></li>
+							<li><a href="https://sre.google/workbook/table-of-contents/" target="_blank">The Site Reliability Workbook</a></li>
+							<li><a href="/blog">ReliabilityOps Blog</a></li>
+						</ul>
+					</div>
+					
+					<div class="resource-category">
+						<h2>Open Source Tools</h2>
+						<ul class="resource-list">
+							<li><a href="https://prometheus.io/" target="_blank">Prometheus - Monitoring</a></li>
+							<li><a href="https://grafana.com/" target="_blank">Grafana - Visualization</a></li>
+							<li><a href="https://www.elastic.co/" target="_blank">Elasticsearch - Log Analysis</a></li>
+						</ul>
+					</div>
+					
+					<div class="resource-category">
+						<h2>Community</h2>
+						<ul class="resource-list">
+							<li><a href="https://github.com/pocketnerdai" target="_blank">My GitHub</a></li>
+							<li><a href="https://dev.to/pocketnerdai" target="_blank">Dev.to Articles</a></li>
+							<li><a href="https://www.linkedin.com/in/christopher-maurice-w-b5075910/" target="_blank">LinkedIn</a></li>
+						</ul>
+					</div>
+				</div>
+				
+				<div class="contribute-section">
+					<h2>Contribute Resources</h2>
+					<p>Know a great SRE resource? <a href="/about">Get in touch</a> to suggest additions.</p>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.page-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+	
+	.page-title {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		margin-bottom: 1rem;
+	}
+	
+	.page-subtitle {
+		font-size: 1.25rem;
+		color: var(--color-navy-300);
+	}
+	
+	.resources-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+		margin-bottom: 4rem;
+	}
+	
+	.resource-category {
+		padding: 2rem;
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+	}
+	
+	.resource-category h2 {
+		font-size: 1.5rem;
+		margin-bottom: 1.5rem;
+		color: var(--color-military-green);
+	}
+	
+	.resource-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	
+	.resource-list li {
+		margin-bottom: 1rem;
+	}
+	
+	.resource-list a {
+		color: var(--color-navy-300);
+		text-decoration: none;
+		transition: color 200ms;
+	}
+	
+	.resource-list a:hover {
+		color: var(--color-military-green);
+		text-decoration: underline;
+	}
+	
+	.contribute-section {
+		text-align: center;
+		padding: 2rem;
+		background: rgba(16, 185, 129, 0.1);
+		border: 1px solid rgba(16, 185, 129, 0.3);
+		border-radius: 0.5rem;
+	}
+	
+	.contribute-section h2 {
+		color: var(--color-military-green);
+		margin-bottom: 1rem;
+	}
+	
+	.contribute-section p {
+		color: var(--color-navy-300);
+		margin: 0;
+	}
+	
+	.contribute-section a {
+		color: var(--color-military-green);
+		text-decoration: none;
+	}
+	
+	.contribute-section a:hover {
+		text-decoration: underline;
+	}
+</style>

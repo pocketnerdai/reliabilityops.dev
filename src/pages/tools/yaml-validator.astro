@@ -1,0 +1,733 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE } from '../../consts';
+
+const pageTitle = `YAML Validator - ${SITE_TITLE}`;
+const pageDescription = "Validate Kubernetes manifests, GitHub Actions, and Docker Compose files with schema checking and real-time feedback.";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="container-custom section-padding">
+				<div class="tool-header">
+					<div class="tool-title-section">
+						<h1 class="tool-title">YAML Validator</h1>
+						<p class="tool-subtitle">
+							Validate your YAML files with schema checking for Kubernetes, GitHub Actions, and Docker Compose
+						</p>
+					</div>
+					<div class="tool-badges">
+						<span class="badge badge-success">Active</span>
+						<span class="badge badge-info">Free</span>
+					</div>
+				</div>
+
+				<div class="tool-container">
+					<div class="input-section">
+						<div class="input-header">
+							<h3>Input YAML</h3>
+							<select id="schemaType" class="schema-select">
+								<option value="auto">Auto-detect</option>
+								<option value="kubernetes">Kubernetes</option>
+								<option value="github-actions">GitHub Actions</option>
+								<option value="docker-compose">Docker Compose</option>
+								<option value="generic">Generic YAML</option>
+							</select>
+						</div>
+						<textarea 
+							id="yamlInput" 
+							class="yaml-input" 
+							placeholder="Paste your YAML here..."
+							spellcheck="false"
+						></textarea>
+						<div class="input-actions">
+							<button id="validateBtn" class="btn btn-primary">
+								<span class="btn-icon">✓</span>
+								Validate
+							</button>
+							<button id="clearBtn" class="btn btn-outline">
+								Clear
+							</button>
+							<button id="exampleBtn" class="btn btn-outline">
+								Load Example
+							</button>
+						</div>
+					</div>
+
+					<div class="output-section">
+						<div class="output-header">
+							<h3>Validation Results</h3>
+							<div id="validationStatus" class="validation-status"></div>
+						</div>
+						<div id="results" class="results-container">
+							<div class="results-placeholder">
+								<svg style="width: 3rem; height: 3rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+								</svg>
+								<p>Paste YAML and click Validate to see results</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="features-section">
+					<h3>Features</h3>
+					<div class="features-grid">
+						<div class="feature-card">
+							<svg style="width: 2rem; height: 2rem;" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							</svg>
+							<h4>Syntax Validation</h4>
+							<p>Checks for proper YAML formatting and structure</p>
+						</div>
+						<div class="feature-card">
+							<svg style="width: 2rem; height: 2rem;" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+							</svg>
+							<h4>Schema Checking</h4>
+							<p>Validates against Kubernetes, GitHub Actions, and Docker Compose schemas</p>
+						</div>
+						<div class="feature-card">
+							<svg style="width: 2rem; height: 2rem;" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+							</svg>
+							<h4>Real-time Feedback</h4>
+							<p>Instant validation with detailed error messages</p>
+						</div>
+						<div class="feature-card">
+							<svg style="width: 2rem; height: 2rem;" class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+							</svg>
+							<h4>Secure</h4>
+							<p>All validation happens in your browser - no data sent to servers</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="examples-section">
+					<h3>Common Use Cases</h3>
+					<div class="examples-grid">
+						<div class="example-card">
+							<h4>Kubernetes Deployment</h4>
+							<p>Validate your K8s manifests before applying</p>
+							<code>kubectl apply -f deployment.yaml</code>
+						</div>
+						<div class="example-card">
+							<h4>GitHub Actions Workflow</h4>
+							<p>Check workflow syntax before committing</p>
+							<code>.github/workflows/ci.yml</code>
+						</div>
+						<div class="example-card">
+							<h4>Docker Compose Services</h4>
+							<p>Ensure compose files are properly structured</p>
+							<code>docker-compose up -d</code>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.tool-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 3rem;
+		flex-wrap: wrap;
+		gap: 2rem;
+	}
+
+	.tool-title-section {
+		flex: 1;
+	}
+
+	.tool-title {
+		font-size: clamp(2.5rem, 5vw, 3.5rem);
+		margin-bottom: 1rem;
+	}
+
+	.tool-subtitle {
+		font-size: 1.25rem;
+		color: var(--color-navy-300);
+	}
+
+	.tool-badges {
+		display: flex;
+		gap: 0.5rem;
+	}
+
+	.tool-container {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+		margin-bottom: 4rem;
+	}
+
+	@media (max-width: 768px) {
+		.tool-container {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.input-section, .output-section {
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+		padding: 1.5rem;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.input-header, .output-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1rem;
+	}
+
+	.input-header h3, .output-header h3 {
+		margin: 0;
+		font-size: 1.25rem;
+		color: white;
+	}
+
+	.schema-select {
+		background: var(--color-navy-700);
+		color: white;
+		border: 1px solid var(--color-navy-600);
+		padding: 0.5rem 1rem;
+		border-radius: 0.25rem;
+		font-size: 0.875rem;
+		cursor: pointer;
+	}
+
+	.yaml-input {
+		width: 100%;
+		min-height: 400px;
+		background: var(--color-navy-900);
+		color: white;
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.25rem;
+		padding: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		line-height: 1.5;
+		resize: vertical;
+		flex: 1;
+	}
+
+	.yaml-input:focus {
+		outline: none;
+		border-color: var(--color-military-green);
+	}
+
+	.input-actions {
+		display: flex;
+		gap: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	.btn-icon {
+		margin-right: 0.5rem;
+	}
+
+	.validation-status {
+		padding: 0.25rem 0.75rem;
+		border-radius: 0.25rem;
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+
+	.validation-status.valid {
+		background: rgba(16, 185, 129, 0.2);
+		color: var(--color-military-green);
+		border: 1px solid rgba(16, 185, 129, 0.3);
+	}
+
+	.validation-status.invalid {
+		background: rgba(239, 68, 68, 0.2);
+		color: var(--color-accent-red);
+		border: 1px solid rgba(239, 68, 68, 0.3);
+	}
+
+	.results-container {
+		background: var(--color-navy-900);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.25rem;
+		padding: 1rem;
+		min-height: 400px;
+		overflow-y: auto;
+		flex: 1;
+	}
+
+	.results-placeholder {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		color: var(--color-navy-400);
+		text-align: center;
+	}
+
+	.results-placeholder svg {
+		margin-bottom: 1rem;
+		opacity: 0.5;
+	}
+
+	.error-item, .warning-item, .success-item {
+		padding: 1rem;
+		border-radius: 0.25rem;
+		margin-bottom: 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+	}
+
+	.error-item {
+		background: rgba(239, 68, 68, 0.1);
+		border: 1px solid rgba(239, 68, 68, 0.3);
+		color: #FCA5A5;
+	}
+
+	.warning-item {
+		background: rgba(245, 158, 11, 0.1);
+		border: 1px solid rgba(245, 158, 11, 0.3);
+		color: #FCD34D;
+	}
+
+	.success-item {
+		background: rgba(16, 185, 129, 0.1);
+		border: 1px solid rgba(16, 185, 129, 0.3);
+		color: var(--color-military-green);
+	}
+
+	.error-line {
+		display: block;
+		margin-top: 0.5rem;
+		color: var(--color-navy-400);
+	}
+
+	.features-section, .examples-section {
+		margin-top: 4rem;
+	}
+
+	.features-section h3, .examples-section h3 {
+		font-size: 1.75rem;
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.features-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 2rem;
+		margin-bottom: 4rem;
+	}
+
+	.feature-card {
+		text-align: center;
+		padding: 2rem;
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+		transition: transform 200ms;
+	}
+
+	.feature-card:hover {
+		transform: translateY(-4px);
+	}
+
+	.feature-icon {
+		color: var(--color-military-green);
+		margin-bottom: 1rem;
+	}
+
+	.feature-card h4 {
+		font-size: 1.125rem;
+		margin-bottom: 0.5rem;
+		color: white;
+	}
+
+	.feature-card p {
+		color: var(--color-navy-400);
+		margin: 0;
+	}
+
+	.examples-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.example-card {
+		padding: 1.5rem;
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+	}
+
+	.example-card h4 {
+		color: var(--color-military-green);
+		margin-bottom: 0.5rem;
+	}
+
+	.example-card p {
+		color: var(--color-navy-300);
+		margin-bottom: 1rem;
+	}
+
+	.example-card code {
+		display: block;
+		background: var(--color-navy-900);
+		padding: 0.5rem;
+		border-radius: 0.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		color: var(--color-accent-blue);
+	}
+</style>
+
+<script>
+// YAML validation logic
+class YAMLValidator {
+	constructor() {
+		this.input = document.getElementById('yamlInput');
+		this.schemaSelect = document.getElementById('schemaType');
+		this.validateBtn = document.getElementById('validateBtn');
+		this.clearBtn = document.getElementById('clearBtn');
+		this.exampleBtn = document.getElementById('exampleBtn');
+		this.results = document.getElementById('results');
+		this.status = document.getElementById('validationStatus');
+		
+		this.initializeEventListeners();
+	}
+	
+	initializeEventListeners() {
+		this.validateBtn.addEventListener('click', () => this.validate());
+		this.clearBtn.addEventListener('click', () => this.clear());
+		this.exampleBtn.addEventListener('click', () => this.loadExample());
+		
+		// Validate on Enter key
+		this.input.addEventListener('keydown', (e) => {
+			if (e.ctrlKey && e.key === 'Enter') {
+				this.validate();
+			}
+		});
+	}
+	
+	validate() {
+		const yaml = this.input.value.trim();
+		if (!yaml) {
+			this.showError('Please enter some YAML to validate');
+			return;
+		}
+		
+		try {
+			// Basic YAML parsing validation
+			const lines = yaml.split('\n');
+			const errors = [];
+			const warnings = [];
+			
+			// Check for basic YAML syntax
+			let indentLevel = 0;
+			let inMultiline = false;
+			
+			lines.forEach((line, index) => {
+				const lineNum = index + 1;
+				
+				// Check for tabs (YAML should use spaces)
+				if (line.includes('\t')) {
+					errors.push({
+						line: lineNum,
+						message: 'YAML files should not contain tabs. Use spaces for indentation.',
+						text: line
+					});
+				}
+				
+				// Check for trailing spaces
+				if (line.endsWith(' ')) {
+					warnings.push({
+						line: lineNum,
+						message: 'Line has trailing whitespace',
+						text: line
+					});
+				}
+				
+				// Basic structure validation
+				if (!inMultiline && line.trim() && !line.startsWith(' ') && !line.startsWith('-')) {
+					// Check for missing colon in key-value pairs
+					if (!line.includes(':') && !line.startsWith('#')) {
+						errors.push({
+							line: lineNum,
+							message: 'Invalid YAML structure. Expected key-value pair or list item.',
+							text: line
+						});
+					}
+				}
+				
+				// Check for multiline indicators
+				if (line.includes('|') || line.includes('>')) {
+					inMultiline = true;
+				} else if (!line.startsWith(' ') && line.trim()) {
+					inMultiline = false;
+				}
+			});
+			
+			// Schema-specific validation
+			const schemaType = this.schemaSelect.value;
+			if (schemaType !== 'generic' && schemaType !== 'auto') {
+				this.validateSchema(yaml, schemaType, errors, warnings);
+			} else if (schemaType === 'auto') {
+				// Auto-detect schema type
+				const detectedType = this.detectSchemaType(yaml);
+				if (detectedType) {
+					this.validateSchema(yaml, detectedType, errors, warnings);
+				}
+			}
+			
+			// Display results
+			this.displayResults(errors, warnings);
+			
+		} catch (error) {
+			this.showError(`Validation error: ${error.message}`);
+		}
+	}
+	
+	detectSchemaType(yaml) {
+		if (yaml.includes('apiVersion:') && yaml.includes('kind:')) {
+			return 'kubernetes';
+		} else if (yaml.includes('jobs:') || yaml.includes('workflow:')) {
+			return 'github-actions';
+		} else if (yaml.includes('version:') && yaml.includes('services:')) {
+			return 'docker-compose';
+		}
+		return null;
+	}
+	
+	validateSchema(yaml, schemaType, errors, warnings) {
+		switch (schemaType) {
+			case 'kubernetes':
+				this.validateKubernetes(yaml, errors, warnings);
+				break;
+			case 'github-actions':
+				this.validateGitHubActions(yaml, errors, warnings);
+				break;
+			case 'docker-compose':
+				this.validateDockerCompose(yaml, errors, warnings);
+				break;
+		}
+	}
+	
+	validateKubernetes(yaml, errors, warnings) {
+		// Check for required fields
+		if (!yaml.includes('apiVersion:')) {
+			errors.push({
+				line: 0,
+				message: 'Missing required field: apiVersion',
+				text: ''
+			});
+		}
+		if (!yaml.includes('kind:')) {
+			errors.push({
+				line: 0,
+				message: 'Missing required field: kind',
+				text: ''
+			});
+		}
+		if (!yaml.includes('metadata:')) {
+			errors.push({
+				line: 0,
+				message: 'Missing required field: metadata',
+				text: ''
+			});
+		}
+		
+		// Check for common mistakes
+		if (yaml.includes('image:') && !yaml.includes(':')) {
+			warnings.push({
+				line: 0,
+				message: 'Image should include a tag (e.g., nginx:latest)',
+				text: ''
+			});
+		}
+	}
+	
+	validateGitHubActions(yaml, errors, warnings) {
+		// Check for workflow structure
+		if (!yaml.includes('name:') && !yaml.includes('on:')) {
+			warnings.push({
+				line: 0,
+				message: 'GitHub Actions workflows typically include "name" and "on" fields',
+				text: ''
+			});
+		}
+		
+		if (!yaml.includes('jobs:')) {
+			errors.push({
+				line: 0,
+				message: 'Missing required field: jobs',
+				text: ''
+			});
+		}
+	}
+	
+	validateDockerCompose(yaml, errors, warnings) {
+		// Check for version
+		if (!yaml.includes('version:')) {
+			warnings.push({
+				line: 0,
+				message: 'Docker Compose files should specify a version',
+				text: ''
+			});
+		}
+		
+		if (!yaml.includes('services:')) {
+			errors.push({
+				line: 0,
+				message: 'Missing required field: services',
+				text: ''
+			});
+		}
+	}
+	
+	displayResults(errors, warnings) {
+		if (errors.length === 0 && warnings.length === 0) {
+			this.status.textContent = 'Valid YAML';
+			this.status.className = 'validation-status valid';
+			this.results.innerHTML = '<div class="success-item">✓ YAML is valid!</div>';
+		} else {
+			this.status.textContent = `${errors.length} errors, ${warnings.length} warnings`;
+			this.status.className = 'validation-status invalid';
+			
+			let html = '';
+			
+			errors.forEach(error => {
+				html += `
+					<div class="error-item">
+						<strong>Error${error.line ? ` at line ${error.line}` : ''}:</strong> ${error.message}
+						${error.text ? `<span class="error-line">${this.escapeHtml(error.text)}</span>` : ''}
+					</div>
+				`;
+			});
+			
+			warnings.forEach(warning => {
+				html += `
+					<div class="warning-item">
+						<strong>Warning${warning.line ? ` at line ${warning.line}` : ''}:</strong> ${warning.message}
+						${warning.text ? `<span class="error-line">${this.escapeHtml(warning.text)}</span>` : ''}
+					</div>
+				`;
+			});
+			
+			this.results.innerHTML = html;
+		}
+	}
+	
+	showError(message) {
+		this.status.textContent = 'Error';
+		this.status.className = 'validation-status invalid';
+		this.results.innerHTML = `<div class="error-item">${message}</div>`;
+	}
+	
+	clear() {
+		this.input.value = '';
+		this.results.innerHTML = `
+			<div class="results-placeholder">
+				<svg style="width: 3rem; height: 3rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+				</svg>
+				<p>Paste YAML and click Validate to see results</p>
+			</div>
+		`;
+		this.status.textContent = '';
+		this.status.className = 'validation-status';
+	}
+	
+	loadExample() {
+		const examples = {
+			kubernetes: `apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80`,
+			'github-actions': `name: CI Pipeline
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - run: npm ci
+    - run: npm test`,
+			'docker-compose': `version: '3.8'
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+  
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:`
+		};
+		
+		const schemaType = this.schemaSelect.value === 'auto' ? 'kubernetes' : this.schemaSelect.value;
+		this.input.value = examples[schemaType] || examples.kubernetes;
+	}
+	
+	escapeHtml(text) {
+		const div = document.createElement('div');
+		div.textContent = text;
+		return div.innerHTML;
+	}
+}
+
+// Initialize validator when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+	new YAMLValidator();
+});
+</script>

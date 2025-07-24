@@ -1,63 +1,686 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, AUTHOR_NAME, AUTHOR_BIO, AUTHOR_EMAIL, SOCIAL_LINKS, METRICS } from '../consts';
+
+const pageTitle = `About - ${SITE_TITLE}`;
+const pageDescription = "Military-trained Site Reliability Engineer transforming reactive operations into proactive reliability through AI-powered predictive analytics.";
+
+// Career milestones
+const milestones = [
+  {
+    year: "2024",
+    title: "Principal SRE at Fox Sports",
+    description: "Leading AI-driven reliability initiatives for millions of streaming users",
+    highlight: true
+  },
+  {
+    year: "2022-2024",
+    title: "Senior SRE at Wells Fargo",
+    description: "Prevented $2M+ in losses through AI anomaly detection systems",
+    metric: "$2M+ Saved"
+  },
+  {
+    year: "2019-2022",
+    title: "SRE at Syneos Health",
+    description: "Reduced infrastructure costs by $800K annually through optimization",
+    metric: "$800K Reduced"
+  },
+  {
+    year: "2015-2019",
+    title: "DevOps Engineer Journey",
+    description: "Built foundation in automation and infrastructure as code",
+  },
+  {
+    year: "2009-2015",
+    title: "Military Service",
+    description: "Developed operational excellence and leadership skills",
+    highlight: true
+  }
+];
+
+// Technical expertise
+const techStack = {
+  "AI/ML": ["Pattern Recognition", "Anomaly Detection", "Predictive Analytics", "LLMs"],
+  "Observability": ["Prometheus", "Grafana", "Elasticsearch", "Datadog", "New Relic"],
+  "Cloud": ["AWS", "Azure", "GCP", "Kubernetes", "Terraform"],
+  "Languages": ["Python", "Go", "JavaScript", "Bash", "SQL"],
+  "Practices": ["SRE", "DevOps", "GitOps", "Chaos Engineering", "Incident Management"]
+};
+
+// Achievements
+const achievements = [
+  { icon: "shield", label: "Military Honors", value: "Bronze Star" },
+  { icon: "chart", label: "Uptime Record", value: "99.99%" },
+  { icon: "users", label: "Users Served", value: "10M+ Daily" },
+  { icon: "code", label: "Open Source", value: "50+ Contributions" }
+];
 ---
 
-<Layout
-	title="About Me"
-	description="Lorem ipsum dolor sit amet"
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- Hero Section -->
+			<section class="about-hero">
+				<div class="container-custom section-padding">
+					<div class="about-hero-content">
+						<h1 class="about-title">I'm {AUTHOR_NAME}</h1>
+						<p class="about-subtitle">
+							A military-trained Site Reliability Engineer who believes <span class="highlight">the best incident is the one that never happens</span>.
+						</p>
+					</div>
+				</div>
+			</section>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+			<!-- Professional Summary -->
+			<section class="container-custom professional-summary">
+				<div class="about-grid">
+					<div class="about-content">
+						<h2 class="section-title">From Military Operations to Site Reliability</h2>
+						<p class="about-text">
+							My approach combines battlefield-tested operational discipline with predictive AI/ML to transform reactive firefighting into proactive reliability engineering. Over 15+ years serving millions of users across financial services and healthcare, I've learned that true reliability comes from predicting failures before they occur.
+						</p>
+						
+						<div class="metrics-inline">
+							<div class="metric-item">
+								<span class="metric-value">{METRICS.saved}</span>
+								<span class="metric-label">Prevented Losses</span>
+							</div>
+							<div class="metric-item">
+								<span class="metric-value">{METRICS.improvement}</span>
+								<span class="metric-label">Reliability Improvement</span>
+							</div>
+							<div class="metric-item">
+								<span class="metric-value">{METRICS.experience}</span>
+								<span class="metric-label">Years Experience</span>
+							</div>
+						</div>
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+						<h3 class="subsection-title">Core Philosophy</h3>
+						<blockquote class="philosophy-quote">
+							"In the military, we learned that preparation prevents poor performance. In SRE, I apply the same principle: use data and AI to prepare for failures before they happen, not after."
+						</blockquote>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+						<h3 class="subsection-title">Current Focus</h3>
+						<p class="about-text">
+							Building next-generation AIOps platforms using MCP servers and machine learning for real-time infrastructure optimization. Creator of <strong>FailoverPro.ai</strong> - an intelligent monitoring platform that reduces alert fatigue by 97% through pattern recognition.
+						</p>
+					</div>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
-</Layout>
+					<div class="about-sidebar">
+						<!-- Achievements Card -->
+						<div class="card achievement-card">
+							<h3 class="card-title">Key Achievements</h3>
+							<div class="achievement-grid">
+								{achievements.map((item) => (
+									<div class="achievement-item">
+										<div class={`achievement-icon ${item.icon}`}>
+											{item.icon === 'shield' && (
+												<svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+												</svg>
+											)}
+											{item.icon === 'chart' && (
+												<svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+												</svg>
+											)}
+											{item.icon === 'users' && (
+												<svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+												</svg>
+											)}
+											{item.icon === 'code' && (
+												<svg style="width: 2rem; height: 2rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+												</svg>
+											)}
+										</div>
+										<div>
+											<div class="achievement-value">{item.value}</div>
+											<div class="achievement-label">{item.label}</div>
+										</div>
+									</div>
+								))}
+							</div>
+						</div>
+
+						<!-- Connect Card -->
+						<div class="card connect-card">
+							<h3 class="card-title">Let's Connect</h3>
+							<div class="connect-links">
+								{SOCIAL_LINKS.github && (
+									<a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" class="connect-link">
+										<svg style="width: 1.25rem; height: 1.25rem;" fill="currentColor" viewBox="0 0 16 16">
+											<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+										</svg>
+										GitHub
+									</a>
+								)}
+								{SOCIAL_LINKS.linkedin && (
+									<a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" class="connect-link">
+										<svg style="width: 1.25rem; height: 1.25rem;" fill="currentColor" viewBox="0 0 24 24">
+											<path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+										</svg>
+										LinkedIn
+									</a>
+								)}
+								{SOCIAL_LINKS.devto && (
+									<a href={SOCIAL_LINKS.devto} target="_blank" rel="noopener noreferrer" class="connect-link">
+										<svg style="width: 1.25rem; height: 1.25rem;" fill="currentColor" viewBox="0 0 24 24">
+											<path d="M7.42 10.05c-.18-.16-.46-.23-.84-.23H6l.02 2.44.04 2.45.56-.02c.41 0 .63-.07.83-.26.24-.24.26-.36.26-2.2 0-1.91-.02-1.96-.29-2.18zM0 4.94v14.12h24V4.94H0zM8.56 15.3c-.44.58-1.06.77-2.53.77H4.71V8.53h1.4c1.67 0 2.16.18 2.6.9.27.43.29.6.32 2.57.05 2.23-.02 2.73-.47 3.3zm5.09-5.47h-2.47v1.77h1.52v1.28l-.72.04-.75.03v1.77l1.22.03 1.2.04v1.28h-1.6c-1.53 0-1.6-.01-1.87-.3l-.3-.28v-3.16c0-3.02.01-3.18.25-3.48.23-.31.25-.31 1.88-.31h1.64v1.3zm4.68 5.45c-.17.43-.64.79-1 .79-.18 0-.45-.15-.67-.39-.32-.32-.45-.63-.82-2.08l-.9-3.39-.45-1.67h.76c.4 0 .75.02.75.05 0 .06 1.16 4.54 1.26 4.83.04.15.32-.7.73-2.3l.66-2.52.74-.04c.4-.02.73 0 .73.04 0 .14-1.67 6.38-1.8 6.68z"/>
+										</svg>
+										Dev.to
+									</a>
+								)}
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Career Timeline -->
+			<section class="timeline-section">
+				<div class="container-custom section-padding">
+					<h2 class="section-title text-center">Career Journey</h2>
+					<div class="timeline">
+						{milestones.map((milestone, index) => (
+							<div class={`timeline-item ${milestone.highlight ? 'highlight' : ''} ${index % 2 === 0 ? 'left' : 'right'}`}>
+								<div class="timeline-content">
+									<span class="timeline-year">{milestone.year}</span>
+									<h3 class="timeline-title">{milestone.title}</h3>
+									<p class="timeline-description">{milestone.description}</p>
+									{milestone.metric && (
+										<span class="timeline-metric badge badge-success">{milestone.metric}</span>
+									)}
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</section>
+
+			<!-- Technical Expertise -->
+			<section class="container-custom section-padding">
+				<h2 class="section-title text-center">Technical Expertise</h2>
+				<div class="tech-grid">
+					{Object.entries(techStack).map(([category, skills]) => (
+						<div class="tech-category">
+							<h3 class="tech-category-title">{category}</h3>
+							<div class="tech-skills">
+								{skills.map((skill) => (
+									<span class="tech-skill">{skill}</span>
+								))}
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+
+			<!-- CTA Section -->
+			<section class="cta-section-about">
+				<div class="container-custom section-padding text-center">
+					<h2 class="cta-title">Ready to Achieve 99.99% Uptime?</h2>
+					<p class="cta-subtitle">
+						Let's discuss how predictive reliability can transform your operations
+					</p>
+					<div class="cta-buttons">
+						<a href="/tools" class="btn btn-primary">
+							Explore Free Tools
+						</a>
+						<a href={`mailto:${AUTHOR_EMAIL}`} class="btn btn-outline">
+							Get in Touch
+						</a>
+					</div>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.professional-summary {
+		padding: 3rem 0;
+	}
+	
+	.text-center {
+		text-align: center;
+	}
+	
+	/* About Hero */
+	.about-hero {
+		background: linear-gradient(135deg, var(--color-navy-900) 0%, var(--color-navy-800) 50%, var(--color-navy-900) 100%);
+		position: relative;
+		overflow: hidden;
+	}
+	
+	.about-hero::before {
+		content: '';
+		position: absolute;
+		top: -50%;
+		left: -50%;
+		width: 200%;
+		height: 200%;
+		background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+		animation: pulse 20s ease-in-out infinite;
+	}
+	
+	.about-hero-content {
+		position: relative;
+		z-index: 1;
+		text-align: center;
+		max-width: 48rem;
+		margin: 0 auto;
+	}
+	
+	.about-title {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		margin-bottom: 1rem;
+		animation: fadeInUp 0.8s ease-out;
+	}
+	
+	.about-subtitle {
+		font-size: clamp(1.25rem, 3vw, 1.75rem);
+		color: var(--color-navy-300);
+		animation: fadeInUp 0.8s ease-out 0.2s both;
+	}
+	
+	.highlight {
+		color: var(--color-military-green);
+		font-weight: 600;
+	}
+	
+	/* About Grid */
+	.about-grid {
+		display: grid;
+		gap: 3rem;
+		align-items: start;
+	}
+	
+	@media (min-width: 1024px) {
+		.about-grid {
+			grid-template-columns: 2fr 1fr;
+		}
+	}
+	
+	.about-content {
+		animation: fadeIn 0.8s ease-out 0.4s both;
+	}
+	
+	.about-text {
+		font-size: 1.125rem;
+		line-height: 1.8;
+		color: var(--color-navy-300);
+		margin-bottom: 2rem;
+	}
+	
+	.subsection-title {
+		font-size: 1.75rem;
+		margin: 2.5rem 0 1rem;
+		color: white;
+	}
+	
+	/* Inline Metrics */
+	.metrics-inline {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 1.5rem;
+		margin: 2rem 0;
+		padding: 2rem;
+		background: rgba(30, 41, 59, 0.5);
+		border-radius: 0.5rem;
+		border: 1px solid var(--color-navy-700);
+	}
+	
+	.metric-item {
+		text-align: center;
+	}
+	
+	.metric-item .metric-value {
+		display: block;
+		font-size: 2rem;
+		font-weight: bold;
+		color: var(--color-military-green);
+		margin-bottom: 0.25rem;
+	}
+	
+	.metric-item .metric-label {
+		font-size: 0.875rem;
+		color: var(--color-navy-400);
+	}
+	
+	/* Philosophy Quote */
+	.philosophy-quote {
+		position: relative;
+		padding: 1.5rem 2rem;
+		margin: 2rem 0;
+		background: rgba(16, 185, 129, 0.1);
+		border-left: 4px solid var(--color-military-green);
+		font-style: italic;
+		color: var(--color-navy-200);
+		border-radius: 0 0.5rem 0.5rem 0;
+	}
+	
+	/* Sidebar Cards */
+	.about-sidebar {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		animation: fadeIn 0.8s ease-out 0.6s both;
+	}
+	
+	.card-title {
+		font-size: 1.25rem;
+		margin-bottom: 1.5rem;
+		color: white;
+	}
+	
+	/* Achievement Card */
+	.achievement-grid {
+		display: grid;
+		gap: 1.5rem;
+	}
+	
+	.achievement-item {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+	
+	.achievement-icon {
+		width: 3.5rem;
+		height: 3.5rem;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+	}
+	
+	.achievement-icon.shield {
+		background: rgba(16, 185, 129, 0.2);
+		color: var(--color-military-green);
+	}
+	
+	.achievement-icon.chart {
+		background: rgba(59, 130, 246, 0.2);
+		color: var(--color-accent-blue);
+	}
+	
+	.achievement-icon.users {
+		background: rgba(245, 158, 11, 0.2);
+		color: var(--color-accent-orange);
+	}
+	
+	.achievement-icon.code {
+		background: rgba(239, 68, 68, 0.2);
+		color: var(--color-accent-red);
+	}
+	
+	.achievement-value {
+		font-size: 1.125rem;
+		font-weight: bold;
+		color: white;
+	}
+	
+	.achievement-label {
+		font-size: 0.875rem;
+		color: var(--color-navy-400);
+	}
+	
+	/* Connect Card */
+	.connect-links {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	
+	.connect-link {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1rem;
+		background: rgba(30, 41, 59, 0.5);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+		color: var(--color-navy-300);
+		text-decoration: none;
+		transition: all 200ms;
+	}
+	
+	.connect-link:hover {
+		background: rgba(16, 185, 129, 0.1);
+		border-color: var(--color-military-green);
+		color: var(--color-military-green);
+		transform: translateX(4px);
+	}
+	
+	/* Timeline */
+	.timeline-section {
+		background: rgba(30, 41, 59, 0.3);
+	}
+	
+	.timeline {
+		position: relative;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem 0;
+	}
+	
+	.timeline::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 2px;
+		height: 100%;
+		background: var(--color-navy-700);
+	}
+	
+	@media (max-width: 768px) {
+		.timeline::before {
+			left: 2rem;
+		}
+	}
+	
+	.timeline-item {
+		position: relative;
+		width: 50%;
+		padding: 1rem 2rem;
+		animation: fadeInUp 0.8s ease-out both;
+	}
+	
+	.timeline-item.left {
+		left: 0;
+		text-align: right;
+		padding-right: 3rem;
+	}
+	
+	.timeline-item.right {
+		left: 50%;
+		padding-left: 3rem;
+	}
+	
+	@media (max-width: 768px) {
+		.timeline-item {
+			width: 100%;
+			padding-left: 4rem;
+			text-align: left;
+		}
+		
+		.timeline-item.left,
+		.timeline-item.right {
+			left: 0;
+		}
+	}
+	
+	.timeline-item::before {
+		content: '';
+		position: absolute;
+		top: 1.5rem;
+		width: 1rem;
+		height: 1rem;
+		background: var(--color-navy-700);
+		border: 3px solid var(--color-navy-900);
+		border-radius: 50%;
+		z-index: 1;
+	}
+	
+	.timeline-item.left::before {
+		right: -0.5rem;
+	}
+	
+	.timeline-item.right::before {
+		left: -0.5rem;
+	}
+	
+	@media (max-width: 768px) {
+		.timeline-item::before {
+			left: 1.5rem;
+		}
+		
+		.timeline-item.left::before,
+		.timeline-item.right::before {
+			left: 1.5rem;
+		}
+	}
+	
+	.timeline-item.highlight::before {
+		background: var(--color-military-green);
+		box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+	}
+	
+	.timeline-content {
+		padding: 1.5rem;
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+		transition: all 300ms;
+	}
+	
+	.timeline-item:hover .timeline-content {
+		border-color: var(--color-military-green);
+		transform: scale(1.02);
+	}
+	
+	.timeline-year {
+		font-size: 0.875rem;
+		color: var(--color-military-green);
+		font-weight: 600;
+	}
+	
+	.timeline-title {
+		font-size: 1.25rem;
+		margin: 0.5rem 0;
+		color: white;
+	}
+	
+	.timeline-description {
+		color: var(--color-navy-300);
+		margin-bottom: 1rem;
+	}
+	
+	.timeline-metric {
+		display: inline-block;
+		margin-top: 0.5rem;
+	}
+	
+	/* Tech Grid */
+	.tech-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 2rem;
+		margin-top: 3rem;
+	}
+	
+	.tech-category {
+		padding: 1.5rem;
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+		transition: all 300ms;
+	}
+	
+	.tech-category:hover {
+		border-color: var(--color-military-green);
+		transform: translateY(-4px);
+	}
+	
+	.tech-category-title {
+		font-size: 1.25rem;
+		margin-bottom: 1rem;
+		color: var(--color-military-green);
+	}
+	
+	.tech-skills {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	
+	.tech-skill {
+		padding: 0.25rem 0.75rem;
+		background: rgba(16, 185, 129, 0.1);
+		border: 1px solid rgba(16, 185, 129, 0.3);
+		border-radius: 9999px;
+		font-size: 0.875rem;
+		color: var(--color-navy-200);
+		transition: all 200ms;
+	}
+	
+	.tech-skill:hover {
+		background: rgba(16, 185, 129, 0.2);
+		transform: scale(1.05);
+	}
+	
+	/* CTA Section */
+	.cta-section-about {
+		background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+		border-top: 1px solid var(--color-navy-700);
+	}
+	
+	/* Animations */
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	
+	@keyframes pulse {
+		0%, 100% {
+			transform: scale(1) rotate(0deg);
+		}
+		50% {
+			transform: scale(1.05) rotate(180deg);
+		}
+	}
+	
+	/* Animation delays for timeline items */
+	.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+	.timeline-item:nth-child(2) { animation-delay: 0.2s; }
+	.timeline-item:nth-child(3) { animation-delay: 0.3s; }
+	.timeline-item:nth-child(4) { animation-delay: 0.4s; }
+	.timeline-item:nth-child(5) { animation-delay: 0.5s; }
+</style>

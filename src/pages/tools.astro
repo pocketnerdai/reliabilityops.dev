@@ -1,0 +1,544 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const pageTitle = `Tools - ${SITE_TITLE}`;
+const pageDescription = "Free AIOps and SRE tools for YAML validation, JWT decoding, regex testing, SLO calculation, and more.";
+
+// Tool categories
+const toolCategories = [
+  {
+    name: "Configuration",
+    icon: "config",
+    tools: [
+      {
+        name: "YAML Validator",
+        description: "Validate Kubernetes manifests, GitHub Actions, and Docker Compose files",
+        status: "coming-soon",
+        features: ["Syntax validation", "Schema checking", "Real-time feedback"],
+        href: "/tools/yaml-validator"
+      }
+    ]
+  },
+  {
+    name: "Security",
+    icon: "security",
+    tools: [
+      {
+        name: "JWT Decoder",
+        description: "Decode and verify JWT tokens with client-side processing",
+        status: "coming-soon",
+        features: ["Secure decoding", "Claims visualization", "Signature verification"],
+        href: "/tools/jwt-decoder"
+      }
+    ]
+  },
+  {
+    name: "Monitoring",
+    icon: "monitoring",
+    tools: [
+      {
+        name: "SLO Calculator",
+        description: "Calculate error budgets and downtime allowances for any SLA",
+        status: "coming-soon",
+        features: ["Multiple 9s comparison", "Budget visualization", "PDF reports"],
+        href: "/tools/slo-calculator"
+      },
+      {
+        name: "Cron Expression Builder",
+        description: "Visual builder for cron expressions with timezone support",
+        status: "coming-soon",
+        features: ["Visual scheduler", "Next run predictions", "Integration examples"],
+        href: "/tools/cron-builder"
+      }
+    ]
+  },
+  {
+    name: "Development",
+    icon: "development",
+    tools: [
+      {
+        name: "Regex Tester",
+        description: "Test regex patterns with DevOps-specific pattern library",
+        status: "coming-soon",
+        features: ["Log parsing patterns", "Real-time matching", "Explanation mode"],
+        href: "/tools/regex-tester"
+      }
+    ]
+  },
+  {
+    name: "AI-Powered",
+    icon: "ai",
+    tools: [
+      {
+        name: "Log Analyzer",
+        description: "AI-powered log pattern recognition and anomaly detection",
+        status: "beta",
+        features: ["Pattern extraction", "Anomaly detection", "Root cause hints"],
+        href: "/tools/log-analyzer"
+      },
+      {
+        name: "Runbook Generator",
+        description: "Generate runbooks from incident descriptions using AI",
+        status: "coming-soon",
+        features: ["Step-by-step guides", "Best practices", "Customizable templates"],
+        href: "/tools/runbook-generator"
+      }
+    ]
+  }
+];
+
+const stats = {
+  totalTools: toolCategories.reduce((acc, cat) => acc + cat.tools.length, 0),
+  activeTools: toolCategories.reduce((acc, cat) => 
+    acc + cat.tools.filter(tool => tool.status === 'active').length, 0
+  ),
+  monthlyUsers: "10k+",
+  savedHours: "1000+"
+};
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- Hero Section -->
+			<section class="tools-hero">
+				<div class="container-custom section-padding">
+					<div class="tools-hero-content">
+						<h1 class="tools-title">AIOps Tools for Modern SREs</h1>
+						<p class="tools-subtitle">
+							Battle-tested tools that reduce toil and prevent incidents. 
+							<span class="highlight">100% free, no sign-up required.</span>
+						</p>
+						<div class="stats-row">
+							<div class="stat-item">
+								<span class="stat-value">{stats.totalTools}</span>
+								<span class="stat-label">Tools Available</span>
+							</div>
+							<div class="stat-item">
+								<span class="stat-value">{stats.monthlyUsers}</span>
+								<span class="stat-label">Monthly Users</span>
+							</div>
+							<div class="stat-item">
+								<span class="stat-value">{stats.savedHours}</span>
+								<span class="stat-label">Hours Saved</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Tools Grid -->
+			<section class="container-custom section-padding">
+				{toolCategories.map((category) => (
+					<div class="tool-category">
+						<div class="category-header">
+							<div class={`category-icon ${category.icon}`}>
+								{category.icon === 'config' && (
+									<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+									</svg>
+								)}
+								{category.icon === 'security' && (
+									<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+									</svg>
+								)}
+								{category.icon === 'monitoring' && (
+									<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+									</svg>
+								)}
+								{category.icon === 'development' && (
+									<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+									</svg>
+								)}
+								{category.icon === 'ai' && (
+									<svg style="width: 1.5rem; height: 1.5rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+									</svg>
+								)}
+							</div>
+							<h2 class="category-title">{category.name}</h2>
+						</div>
+						<div class="tools-grid">
+							{category.tools.map((tool) => (
+								<a href={tool.href} class="tool-card">
+									<div class="tool-header">
+										<h3 class="tool-name">{tool.name}</h3>
+										{tool.status === 'beta' && (
+											<span class="badge badge-info">Beta</span>
+										)}
+										{tool.status === 'coming-soon' && (
+											<span class="badge badge-warning">Coming Soon</span>
+										)}
+									</div>
+									<p class="tool-description">{tool.description}</p>
+									<ul class="tool-features">
+										{tool.features.map((feature) => (
+											<li class="tool-feature">
+												<svg style="width: 1rem; height: 1rem;" class="feature-check" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+												</svg>
+												{feature}
+											</li>
+										))}
+									</ul>
+									<div class="tool-cta">
+										{tool.status === 'coming-soon' ? 'Coming Soon' : 'Try Now →'}
+									</div>
+								</a>
+							))}
+						</div>
+					</div>
+				))}
+			</section>
+
+			<!-- Coming Soon Section -->
+			<section class="coming-soon-section">
+				<div class="container-custom section-padding">
+					<h2 class="section-title text-center">More Tools Coming Soon</h2>
+					<p class="coming-soon-text">
+						Building reliable tools takes time. I'm working on new additions including:
+					</p>
+					<div class="coming-soon-grid">
+						<div class="coming-soon-item">
+							<h4>Capacity Planner</h4>
+							<p>AI-powered resource prediction</p>
+						</div>
+						<div class="coming-soon-item">
+							<h4>Incident Timeline Builder</h4>
+							<p>Automated RCA documentation</p>
+						</div>
+						<div class="coming-soon-item">
+							<h4>Alert Fatigue Analyzer</h4>
+							<p>Identify and reduce noise</p>
+						</div>
+						<div class="coming-soon-item">
+							<h4>Config Drift Detector</h4>
+							<p>Spot configuration changes</p>
+						</div>
+					</div>
+					<div class="subscribe-cta">
+						<p>Want to be notified when new tools launch?</p>
+						<a href="/blog" class="btn btn-primary">Follow the Blog</a>
+					</div>
+				</div>
+			</section>
+
+			<!-- Open Source CTA -->
+			<section class="container-custom section-padding text-center">
+				<h2 class="cta-title">Open Source Contributions Welcome</h2>
+				<p class="cta-subtitle">
+					These tools are built by the community, for the community. Have an idea or want to contribute?
+				</p>
+				<div class="cta-buttons">
+					<a href="https://github.com/pocketnerdai" target="_blank" class="btn btn-primary">
+						View on GitHub
+					</a>
+					<a href="/about" class="btn btn-outline">
+						Get in Touch
+					</a>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	/* Tools Hero */
+	.tools-hero {
+		background: linear-gradient(135deg, var(--color-navy-900) 0%, var(--color-navy-800) 50%, var(--color-navy-900) 100%);
+		position: relative;
+		overflow: hidden;
+	}
+	
+	.tools-hero::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-image: 
+			radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+			radial-gradient(circle at 80% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+		animation: pulse 20s ease-in-out infinite;
+	}
+	
+	.tools-hero-content {
+		position: relative;
+		z-index: 1;
+		text-align: center;
+		max-width: 48rem;
+		margin: 0 auto;
+	}
+	
+	.tools-title {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		margin-bottom: 1rem;
+		animation: fadeInUp 0.8s ease-out;
+	}
+	
+	.tools-subtitle {
+		font-size: clamp(1.25rem, 3vw, 1.5rem);
+		color: var(--color-navy-300);
+		margin-bottom: 3rem;
+		animation: fadeInUp 0.8s ease-out 0.2s both;
+	}
+	
+	.highlight {
+		color: var(--color-military-green);
+		font-weight: 600;
+	}
+	
+	.stats-row {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2rem;
+		animation: fadeInUp 0.8s ease-out 0.4s both;
+	}
+	
+	.stat-item {
+		text-align: center;
+	}
+	
+	.stat-value {
+		display: block;
+		font-size: 2.5rem;
+		font-weight: bold;
+		color: var(--color-military-green);
+		margin-bottom: 0.25rem;
+	}
+	
+	.stat-label {
+		font-size: 0.875rem;
+		color: var(--color-navy-400);
+	}
+	
+	/* Tool Categories */
+	.tool-category {
+		margin-bottom: 4rem;
+		animation: fadeIn 0.8s ease-out both;
+	}
+	
+	.category-header {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+	
+	.category-icon {
+		width: 3rem;
+		height: 3rem;
+		border-radius: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.category-icon.config {
+		background: rgba(16, 185, 129, 0.2);
+		color: var(--color-military-green);
+	}
+	
+	.category-icon.security {
+		background: rgba(239, 68, 68, 0.2);
+		color: var(--color-accent-red);
+	}
+	
+	.category-icon.monitoring {
+		background: rgba(59, 130, 246, 0.2);
+		color: var(--color-accent-blue);
+	}
+	
+	.category-icon.development {
+		background: rgba(245, 158, 11, 0.2);
+		color: var(--color-accent-orange);
+	}
+	
+	.category-icon.ai {
+		background: rgba(139, 92, 246, 0.2);
+		color: #8B5CF6;
+	}
+	
+	.category-title {
+		font-size: 1.75rem;
+		color: white;
+		margin: 0;
+	}
+	
+	/* Tools Grid */
+	.tools-grid {
+		display: grid;
+		gap: 1.5rem;
+		grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	}
+	
+	.tool-card {
+		display: flex;
+		flex-direction: column;
+		padding: 1.5rem;
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+		text-decoration: none;
+		color: inherit;
+		transition: all 300ms;
+		cursor: pointer;
+	}
+	
+	.tool-card:hover {
+		border-color: var(--color-military-green);
+		transform: translateY(-4px);
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	}
+	
+	.tool-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 1rem;
+	}
+	
+	.tool-name {
+		font-size: 1.25rem;
+		color: white;
+		margin: 0;
+	}
+	
+	.tool-description {
+		color: var(--color-navy-300);
+		margin-bottom: 1.5rem;
+		flex-grow: 1;
+	}
+	
+	.tool-features {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 1.5rem 0;
+	}
+	
+	.tool-feature {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.5rem;
+		font-size: 0.875rem;
+		color: var(--color-navy-400);
+	}
+	
+	.feature-check {
+		color: var(--color-military-green);
+		flex-shrink: 0;
+	}
+	
+	.tool-cta {
+		font-weight: 600;
+		color: var(--color-military-green);
+		margin-top: auto;
+	}
+	
+	/* Coming Soon Section */
+	.coming-soon-section {
+		background: rgba(30, 41, 59, 0.3);
+		border-top: 1px solid var(--color-navy-700);
+		border-bottom: 1px solid var(--color-navy-700);
+	}
+	
+	.coming-soon-text {
+		text-align: center;
+		color: var(--color-navy-300);
+		margin-bottom: 3rem;
+		font-size: 1.125rem;
+	}
+	
+	.coming-soon-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 2rem;
+		margin-bottom: 3rem;
+	}
+	
+	.coming-soon-item {
+		text-align: center;
+		padding: 1.5rem;
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+	}
+	
+	.coming-soon-item h4 {
+		color: white;
+		margin-bottom: 0.5rem;
+		font-size: 1.125rem;
+	}
+	
+	.coming-soon-item p {
+		color: var(--color-navy-400);
+		margin: 0;
+		font-size: 0.875rem;
+	}
+	
+	.subscribe-cta {
+		text-align: center;
+	}
+	
+	.subscribe-cta p {
+		color: var(--color-navy-300);
+		margin-bottom: 1.5rem;
+		font-size: 1.125rem;
+	}
+	
+	.text-center {
+		text-align: center;
+	}
+	
+	/* Animations */
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+	
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+	
+	@keyframes pulse {
+		0%, 100% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.05);
+		}
+	}
+	
+	/* Stagger animations for categories */
+	.tool-category:nth-child(1) { animation-delay: 0.1s; }
+	.tool-category:nth-child(2) { animation-delay: 0.2s; }
+	.tool-category:nth-child(3) { animation-delay: 0.3s; }
+	.tool-category:nth-child(4) { animation-delay: 0.4s; }
+	.tool-category:nth-child(5) { animation-delay: 0.5s; }
+</style>

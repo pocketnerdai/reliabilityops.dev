@@ -1,0 +1,78 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const pageTitle = `AI Lab - ${SITE_TITLE}`;
+const pageDescription = "Experimental AI-powered tools for next-generation Site Reliability Engineering.";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="container-custom section-padding">
+				<div class="page-header">
+					<h1 class="page-title">AI Lab</h1>
+					<p class="page-subtitle">
+						Experimental AI tools pushing the boundaries of what's possible in SRE.
+					</p>
+					<div class="badge badge-info">Beta - Expect Rough Edges</div>
+				</div>
+				
+				<div class="coming-soon-message">
+					<p>The AI Lab is where I experiment with cutting-edge AI applications for reliability engineering.</p>
+					<p>First tools launching Q1 2025. <a href="/blog">Follow the blog</a> for updates.</p>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.page-header {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+	
+	.page-title {
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		margin-bottom: 1rem;
+	}
+	
+	.page-subtitle {
+		font-size: 1.25rem;
+		color: var(--color-navy-300);
+		margin-bottom: 1.5rem;
+	}
+	
+	.coming-soon-message {
+		max-width: 600px;
+		margin: 0 auto;
+		text-align: center;
+		padding: 3rem;
+		background: var(--color-navy-800);
+		border: 1px solid var(--color-navy-700);
+		border-radius: 0.5rem;
+	}
+	
+	.coming-soon-message p {
+		color: var(--color-navy-300);
+		margin-bottom: 1rem;
+	}
+	
+	.coming-soon-message a {
+		color: var(--color-military-green);
+		text-decoration: none;
+	}
+	
+	.coming-soon-message a:hover {
+		text-decoration: underline;
+	}
+</style>
