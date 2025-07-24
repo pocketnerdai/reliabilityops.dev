@@ -1,0 +1,361 @@
+/* Responsive fixes and improvements */
+
+/* Base responsive typography */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+  
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  h1 {
+    font-size: 2rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  h3 {
+    font-size: 1.25rem !important;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem !important;
+    line-height: 1.2;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.125rem !important;
+  }
+}
+
+/* Fix container on mobile */
+@media (max-width: 768px) {
+  .container-custom {
+    padding: 0 1rem !important;
+    max-width: 100%;
+  }
+  
+  .section-padding {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+}
+
+/* Header fixes */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #334155;
+}
+
+header nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+/* Fix social media icons */
+.social-links svg {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  display: block;
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+}
+
+/* Navigation responsive */
+@media (max-width: 768px) {
+  .nav-links,
+  .hidden.md\\:flex {
+    display: none !important;
+  }
+  
+  #mobile-menu-button {
+    display: block !important;
+  }
+  
+  #mobile-menu:not(.hidden) {
+    display: block !important;
+  }
+  
+  #mobile-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--color-navy-300);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+  }
+  
+  #mobile-menu a:hover {
+    background-color: rgba(30, 41, 59, 0.5);
+    color: var(--color-military-green);
+  }
+}
+
+@media (min-width: 769px) {
+  .hidden.md\\:flex {
+    display: flex !important;
+  }
+  
+  #mobile-menu-button,
+  .md\\:hidden {
+    display: none !important;
+  }
+}
+
+/* Grid fixes */
+@media (max-width: 640px) {
+  .metrics-grid,
+  .features-grid,
+  .tools-grid,
+  .resources-grid,
+  .examples-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .value-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .stats-row {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+}
+
+/* Card and button fixes */
+@media (max-width: 640px) {
+  .card,
+  .metric-card,
+  .tool-card,
+  .feature-card {
+    padding: 1rem !important;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .cta-buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Tool page fixes */
+@media (max-width: 768px) {
+  .tool-container {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .yaml-input {
+    min-height: 300px !important;
+  }
+  
+  .results-container {
+    min-height: 300px !important;
+  }
+}
+
+/* Footer fixes */
+@media (max-width: 640px) {
+  footer .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    text-align: center;
+  }
+  
+  .footer-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-links {
+    justify-content: center;
+  }
+}
+
+/* Blog post fixes */
+@media (max-width: 768px) {
+  .prose {
+    font-size: 1rem;
+  }
+  
+  .prose pre {
+    font-size: 0.875rem;
+  }
+  
+  .blog-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Utility fixes */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-military-green) 0%, var(--color-accent-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Fix overflow issues */
+main {
+  overflow-x: hidden;
+}
+
+pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Accessibility improvements */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Ensure proper focus styles */
+a:focus,
+button:focus {
+  outline: 2px solid var(--color-military-green);
+  outline-offset: 2px;
+}
+
+/* Fix specific class utilities */
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-8 {
+  gap: 2rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.block {
+  display: block;
+}
+
+.text-white {
+  color: white;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.pt-2 {
+  padding-top: 0.5rem;
+}
+
+.pb-3 {
+  padding-bottom: 0.75rem;
+}
+
+.space-y-1 > * + * {
+  margin-top: 0.25rem;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.w-6 {
+  width: 1.5rem;
+}
+
+.h-6 {
+  height: 1.5rem;
+}

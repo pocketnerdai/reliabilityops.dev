@@ -3,12 +3,12 @@ import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE, NAV_ITEMS, SOCIAL_LINKS } from '../consts';
 ---
 
-<header class="sticky top-0 z-50 bg-navy-900/95 backdrop-blur-md border-b border-navy-700">
+<header>
 	<nav class="container-custom flex items-center justify-between py-4">
 		<!-- Logo/Brand -->
 		<h2 class="text-2xl font-bold">
-			<a href="/" class="text-white hover:text-military-green transition-colors flex items-center gap-2">
-				<span class="text-military-green terminal-cursor">⚡</span>
+			<a href="/" class="logo-link flex items-center gap-2">
+				<span class="logo-icon terminal-cursor">⚡</span>
 				{SITE_TITLE}
 			</a>
 		</h2>
@@ -108,7 +108,7 @@ import { SITE_TITLE, NAV_ITEMS, SOCIAL_LINKS } from '../consts';
 	}
 	
 	.logo-link {
-		color: white;
+		color: white !important;
 		text-decoration: none;
 		display: flex;
 		align-items: center;
@@ -117,11 +117,11 @@ import { SITE_TITLE, NAV_ITEMS, SOCIAL_LINKS } from '../consts';
 	}
 	
 	.logo-link:hover {
-		color: var(--color-military-green);
+		color: var(--color-military-green) !important;
 	}
 	
 	.logo-icon {
-		color: var(--color-military-green);
+		color: var(--color-military-green) !important;
 	}
 	
 	.terminal-cursor::after {
