@@ -6,11 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "sanity:init": "node scripts/init-sanity.js",
-    "sanity:deploy": "sanity deploy --no-browse",
-    "sanity:manage": "sanity manage",
-    "deploy:studio": "./scripts/deploy-sanity.sh"
+    "astro": "astro"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",
