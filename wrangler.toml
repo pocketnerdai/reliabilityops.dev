@@ -1,0 +1,9 @@
+name = "reliabilityops-dev"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[site]
+bucket = "./dist"
+
+# Enable Node.js compatibility for React SSR
+node_compat = true
