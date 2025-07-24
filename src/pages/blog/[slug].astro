@@ -1,0 +1,47 @@
+---
+import { type SanityDocument } from '@sanity/client';
+import BlogPost from '../../layouts/BlogPost.astro';
+import { client } from '../../sanity/lib/client';
+import { postBySlugQuery } from '../../sanity/lib/queries';
+
+export async function getStaticPaths() {
+  const posts = await client.fetch(`*[_type == "post"] { slug }`);
+  
+  return posts.map((post: any) => ({
+    params: { slug: post.slug.current },
+  }));
+}
+
+const { slug } = Astro.params;
+const post = await client.fetch(postBySlugQuery, { slug });
+
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+// Transform Sanity data to match BlogPost layout expectations
+const postData = {
+  title: post.title,
+  description: post.excerpt,
+  pubDate: new Date(post.publishedAt),
+  heroImage: post.heroImage,
+  // We'll handle body content separately
+};
+---
+
+<BlogPost {...postData}>
+  <!-- Render Portable Text content here -->
+  <div class="prose prose-lg prose-invert max-w-none">
+    {post.body && (
+      <Fragment>
+        <!-- For now, show a message. We'll implement PortableText rendering next -->
+        <p class="text-slate-300">
+          Content rendering will be implemented with PortableText component.
+        </p>
+        <pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto">
+          <code>{JSON.stringify(post.body, null, 2)}</code>
+        </pre>
+      </Fragment>
+    )}
+  </div>
+</BlogPost>
