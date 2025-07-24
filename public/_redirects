@@ -1,0 +1,2 @@
+# Redirect /studio to the Sanity hosted studio
+/studio https://1xy15psx.sanity.studio 301
