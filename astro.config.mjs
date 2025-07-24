@@ -32,7 +32,9 @@ export default defineConfig({
     },
   },
   
-  // Hybrid rendering: static by default, SSR for studio
-  output: 'hybrid',
-  adapter: cloudflare(),
+  // Server rendering for Sanity Studio
+  output: 'server',
+  adapter: cloudflare({
+    mode: 'directory',
+  }),
 });
