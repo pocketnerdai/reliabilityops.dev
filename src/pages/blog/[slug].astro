@@ -54,13 +54,16 @@ const postData = {
                 class="w-full rounded-lg my-6"
               />
             ),
-            code: ({value}) => (
-              <pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto my-6">
-                <code class={`language-${value.language || 'plaintext'}`}>
-                  {value.code}
-                </code>
-              </pre>
-            ),
+            code: ({value}) => {
+              const language = value.language || 'plaintext';
+              return (
+                <pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto my-6">
+                  <code class={`language-${language}`}>
+                    {value.code}
+                  </code>
+                </pre>
+              );
+            },
           }
         }}
       />
