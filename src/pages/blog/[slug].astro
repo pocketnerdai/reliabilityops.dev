@@ -17,207 +17,59 @@ if (!post) {
 // Cache settings
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
 
-// Complete Portable Text renderer
+// Simple function to render Portable Text
 function renderContent(blocks) {
   if (!blocks || !Array.isArray(blocks)) return '';
   
   let html = '';
   
   blocks.forEach(block => {
-    // Route based on block type
-    switch (block._type) {
-      case 'block':
-        html += renderTextBlock(block);
-        break;
-      case 'image':
-        html += renderImage(block);
-        break;
-      case 'code':
-        html += renderCodeBlock(block);
-        break;
-      default:
-        console.warn(`Unknown block type: ${block._type}`);
+    if (block._type === 'block' && block.children) {
+      let text = '';
+      block.children.forEach(child => {
+        if (child.text) {
+          let segment = child.text;
+          
+          // Handle links
+          if (child.marks && block.markDefs) {
+            child.marks.forEach(mark => {
+              const markDef = block.markDefs.find(def => def._key === mark);
+              if (markDef && markDef._type === 'link') {
+                segment = `<a href="${markDef.href}" class="text-emerald-400 hover:text-emerald-300 underline">${segment}</a>`;
+              }
+            });
+          }
+          
+          text += segment;
+        }
+      });
+      
+      // Split by double newlines for paragraphs
+      const paragraphs = text.split('\n\n');
+      paragraphs.forEach(para => {
+        if (para.trim()) {
+          const formatted = para.replace(/\n/g, '<br>');
+          html += `<p class="mb-4">${formatted}</p>`;
+        }
+      });
     }
   });
   
   return html;
 }
 
-// Handle text blocks with different styles
-function renderTextBlock(block) {
-  if (!block.children) return '';
-  
-  // Process children to handle marks
-  let content = '';
-  block.children.forEach(child => {
-    if (child._type === 'span' && child.text) {
-      content += processMarks(child, block.markDefs || []);
-    }
-  });
-  
-  // Handle different block styles
-  switch (block.style) {
-    case 'h1':
-      return `<h1 class="text-4xl font-bold mt-8 mb-4">${content}</h1>`;
-    case 'h2':
-      return `<h2 class="text-3xl font-bold mt-6 mb-3">${content}</h2>`;
-    case 'h3':
-      return `<h3 class="text-2xl font-semibold mt-4 mb-2">${content}</h3>`;
-    case 'h4':
-      return `<h4 class="text-xl font-semibold mt-3 mb-2">${content}</h4>`;
-    case 'blockquote':
-      return `<blockquote class="border-l-4 border-emerald-500 pl-4 italic my-4">${content}</blockquote>`;
-    case 'normal':
-    default:
-      // For normal paragraphs, handle newlines
-      if (content.includes('\n\n')) {
-        return content.split('\n\n').map(para => 
-          para.trim() ? `<p class="mb-4">${para.replace(/\n/g, '<br>')}</p>` : ''
-        ).join('');
-      } else {
-        const formatted = content.replace(/\n/g, '<br>');
-        return `<p class="mb-4">${formatted}</p>`;
-      }
-  }
-  
-  // Handle list items
-  if (block.listItem) {
-    const listContent = `<li>${content}</li>`;
-    // Note: In a real implementation, you'd need to group consecutive list items
-    return block.listItem === 'bullet' 
-      ? `<ul class="list-disc list-inside mb-4">${listContent}</ul>`
-      : `<ol class="list-decimal list-inside mb-4">${listContent}</ol>`;
-  }
-}
-
-// Process marks (bold, italic, links, etc.)
-function processMarks(span, markDefs) {
-  let text = span.text;
-  
-  if (!span.marks || span.marks.length === 0) {
-    return text;
-  }
-  
-  // Apply marks in reverse order to handle nesting properly
-  const marks = [...span.marks].reverse();
-  
-  marks.forEach(mark => {
-    // Check if it's a mark definition (like a link)
-    const markDef = markDefs.find(def => def._key === mark);
-    if (markDef) {
-      switch (markDef._type) {
-        case 'link':
-          text = `<a href="${markDef.href}" class="text-emerald-400 hover:text-emerald-300 underline" target="_blank" rel="noopener">${text}</a>`;
-          break;
-      }
-    } else {
-      // Handle decorators
-      switch (mark) {
-        case 'strong':
-          text = `<strong class="font-semibold">${text}</strong>`;
-          break;
-        case 'em':
-          text = `<em>${text}</em>`;
-          break;
-        case 'code':
-          text = `<code class="bg-slate-800 px-1 py-0.5 rounded text-emerald-400">${text}</code>`;
-          break;
-        case 'underline':
-          text = `<span class="underline">${text}</span>`;
-          break;
-        case 'strike-through':
-          text = `<s>${text}</s>`;
-          break;
-      }
-    }
-  });
-  
-  return text;
-}
-
-// Render images
-function renderImage(block) {
-  if (!block.asset) return '';
-  
-  try {
-    const imageUrl = urlForImage(block).width(800).url();
-    const alt = block.alt || '';
-    const caption = block.caption || '';
-    
-    return `
-      <figure class="my-6">
-        <img src="${imageUrl}" alt="${alt}" class="w-full rounded-lg shadow-xl" />
-        ${caption ? `<figcaption class="text-center text-sm text-slate-400 mt-2">${caption}</figcaption>` : ''}
-      </figure>
-    `;
-  } catch (error) {
-    console.error('Error rendering image:', error);
-    return '';
-  }
-}
-
-// Render code blocks
-function renderCodeBlock(block) {
-  const code = block.code || '';
-  const language = block.language || 'plaintext';
-  const filename = block.filename || '';
-  
-  return `
-    <div class="my-6">
-      ${filename ? `<div class="text-sm text-slate-400 mb-1">${filename}</div>` : ''}
-      <pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto">
-        <code class="language-${language}">${escapeHtml(code)}</code>
-      </pre>
-    </div>
-  `;
-}
-
-// Helper to escape HTML in code blocks
-function escapeHtml(text) {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-// Test the renderer with known data
-const testBlock = [{
-  _type: 'block',
-  style: 'h2',
-  children: [{ _type: 'span', text: 'Test Heading', marks: ['strong'] }],
-  markDefs: []
-}];
-
-// Comprehensive debugging
-console.log('=== DEBUGGING PORTABLE TEXT ===');
-console.log('Post title:', post.title);
-console.log('Post body exists:', !!post.body);
-console.log('Post body is array:', Array.isArray(post.body));
-console.log('Number of blocks:', post.body?.length || 0);
-
-// Log first block in detail
+// Debug logging
+console.log('=== PORTABLE TEXT RENDERING ===');
+console.log('Post:', post.title);
+console.log('Body blocks:', post.body?.length || 0);
 if (post.body && post.body[0]) {
-  console.log('\nFirst block structure:');
-  console.log('Type:', post.body[0]._type);
-  console.log('Style:', post.body[0].style);
-  console.log('Children:', JSON.stringify(post.body[0].children, null, 2));
-  console.log('MarkDefs:', JSON.stringify(post.body[0].markDefs, null, 2));
+  console.log('First block:', JSON.stringify(post.body[0], null, 2));
 }
 
-// Test the renderer
-console.log('\nTest block render:');
-console.log('Input:', JSON.stringify(testBlock, null, 2));
-const testHtml = renderContent(testBlock);
-console.log('Output:', testHtml);
-
-// Render the actual content
 const bodyHtml = renderContent(post.body);
-console.log('\nRendered HTML length:', bodyHtml.length);
-console.log('First 200 chars:', bodyHtml.substring(0, 200));
-
 const heroImageUrl = post.heroImage ? urlForImage(post.heroImage).width(1200).height(600).url() : null;
+
+console.log('Rendered HTML length:', bodyHtml.length);
 ---
 
 <!DOCTYPE html>
@@ -235,7 +87,6 @@ const heroImageUrl = post.heroImage ? urlForImage(post.heroImage).width(1200).he
     <Header />
     <main class="min-h-screen bg-slate-900 pt-20">
       <article>
-        <!-- Hero Image -->
         {heroImageUrl && (
           <div class="w-full max-w-6xl mx-auto px-4 mb-8">
             <img 
@@ -246,9 +97,7 @@ const heroImageUrl = post.heroImage ? urlForImage(post.heroImage).width(1200).he
           </div>
         )}
         
-        <!-- Article Content -->
         <div class="container mx-auto px-4 py-8 max-w-4xl">
-          <!-- Title Section -->
           <div class="text-center mb-8">
             <div class="text-slate-400 mb-4">
               <FormattedDate date={new Date(post.publishedAt)} />
@@ -259,30 +108,24 @@ const heroImageUrl = post.heroImage ? urlForImage(post.heroImage).width(1200).he
           
           <hr class="border-slate-700 mb-8" />
           
-          <!-- Debug Section -->
+          <!-- Debug info -->
           <div class="mb-8 p-4 bg-slate-800 rounded">
             <h3 class="text-emerald-400 mb-2">Debug Info:</h3>
-            <p class="text-sm text-slate-300">Body HTML exists: {bodyHtml ? 'Yes' : 'No'}</p>
-            <p class="text-sm text-slate-300">Body HTML length: {bodyHtml.length}</p>
-            <p class="text-sm text-slate-300">Test render: <span set:html={testHtml} /></p>
+            <p class="text-sm text-slate-300">Content length: {bodyHtml.length} characters</p>
+            <p class="text-sm text-slate-300">Blocks processed: {post.body?.length || 0}</p>
           </div>
           
           <!-- Article Body -->
           <div class="prose prose-lg prose-invert prose-slate max-w-none
             prose-headings:text-white 
-            prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4
-            prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-3
-            prose-p:text-slate-300 prose-p:mb-4 prose-p:leading-relaxed
-            prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:text-emerald-300
+            prose-p:text-slate-300 prose-p:mb-4
+            prose-a:text-emerald-400 prose-a:hover:text-emerald-300
             prose-strong:text-white prose-strong:font-semibold
-            prose-code:text-emerald-400 prose-code:bg-slate-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-            prose-pre:bg-slate-800 prose-pre:border prose-pre:border-slate-700
-            prose-blockquote:border-l-4 prose-blockquote:border-emerald-500 prose-blockquote:pl-4 prose-blockquote:italic
-            prose-ul:text-slate-300 prose-li:text-slate-300
-            prose-img:rounded-lg prose-img:shadow-xl"
-            set:html={bodyHtml} />
+            prose-code:text-emerald-400 prose-code:bg-slate-800 
+            prose-blockquote:border-l-4 prose-blockquote:border-emerald-500">
+            <div set:html={bodyHtml}></div>
+          </div>
           
-          <!-- Navigation -->
           <div class="mt-16 pt-8 border-t border-slate-700">
             <a href="/blog" class="text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
