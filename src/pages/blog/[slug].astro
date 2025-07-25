@@ -1,9 +1,7 @@
 ---
-import { toHTML } from '@portabletext/to-html';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { client } from '../../sanity/lib/client';
 import { postBySlugQuery } from '../../sanity/lib/queries';
-import { urlForImage } from '../../sanity/lib/image';
 
 const { slug } = Astro.params;
 const post = await client.fetch(postBySlugQuery, { slug });
@@ -16,49 +14,15 @@ if (!post) {
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
 Astro.response.headers.set('CDN-Cache-Control', 'public, max-age=3600');
 
-// Simple HTML conversion without complex handlers
-let bodyHtml = '';
-if (post.body) {
-  try {
-    bodyHtml = toHTML(post.body, {
-      components: {
-        types: {
-          image: ({value}) => {
-            try {
-              const imageUrl = urlForImage(value).url();
-              return `<img src="${imageUrl}" alt="${value.alt || ''}" class="w-full rounded-lg my-6" />`;
-            } catch {
-              return '';
-            }
-          }
-        },
-        marks: {
-          link: ({children, value}) => {
-            const href = value?.href || '#';
-            const text = Array.isArray(children) ? children.join('') : children;
-            return `<a href="${href}" class="text-emerald-400 hover:text-emerald-300 underline" target="_blank" rel="noopener">${text}</a>`;
-          }
-        }
-      }
-    });
-    
-    // Post-process to handle newlines
-    bodyHtml = bodyHtml
-      .replace(/\n\n/g, '</p><p class="mb-4">')
-      .replace(/\n/g, '<br />')
-      .replace(/<p>/g, '<p class="mb-4">');
-      
-    // Ensure proper paragraph wrapping
-    if (!bodyHtml.startsWith('<p')) {
-      bodyHtml = `<p class="mb-4">${bodyHtml}`;
+// Extract plain text from body for now
+let bodyContent = '';
+if (post.body && Array.isArray(post.body)) {
+  bodyContent = post.body.map(block => {
+    if (block._type === 'block' && block.children) {
+      return block.children.map(child => child.text || '').join('');
     }
-    if (!bodyHtml.endsWith('</p>')) {
-      bodyHtml = `${bodyHtml}</p>`;
-    }
-  } catch (error) {
-    console.error('Error rendering body:', error);
-    bodyHtml = '<p class="text-red-400">Error rendering content</p>';
-  }
+    return '';
+  }).join('\n\n');
 }
 
 // Transform Sanity data to match BlogPost layout expectations
@@ -71,5 +35,9 @@ const postData = {
 ---
 
 <BlogPost {...postData}>
-  <div class="prose prose-lg prose-invert max-w-none" set:html={bodyHtml} />
+  <div class="prose prose-lg prose-invert max-w-none">
+    <div class="whitespace-pre-wrap text-slate-300">
+      {bodyContent}
+    </div>
+  </div>
 </BlogPost>
