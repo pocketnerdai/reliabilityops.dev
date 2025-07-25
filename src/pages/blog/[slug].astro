@@ -16,11 +16,6 @@ if (!post) {
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
 Astro.response.headers.set('CDN-Cache-Control', 'public, max-age=3600');
 
-// Debug: Log the post data
-console.log('Post data:', JSON.stringify(post, null, 2));
-console.log('Post body exists:', !!post.body);
-console.log('Post body type:', typeof post.body);
-
 // Convert Portable Text to HTML
 const bodyHtml = post.body ? toHTML(post.body, {
   components: {
