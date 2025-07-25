@@ -17,49 +17,178 @@ if (!post) {
 // Cache settings
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
 
-// Simple function to render Portable Text
+// Complete Portable Text renderer
 function renderContent(blocks) {
   if (!blocks || !Array.isArray(blocks)) return '';
   
   let html = '';
   
   blocks.forEach(block => {
-    if (block._type === 'block' && block.children) {
-      let text = '';
-      block.children.forEach(child => {
-        if (child.text) {
-          let segment = child.text;
-          
-          // Handle links
-          if (child.marks && block.markDefs) {
-            child.marks.forEach(mark => {
-              const markDef = block.markDefs.find(def => def._key === mark);
-              if (markDef && markDef._type === 'link') {
-                segment = `<a href="${markDef.href}" class="text-emerald-400 hover:text-emerald-300 underline">${segment}</a>`;
-              }
-            });
-          }
-          
-          text += segment;
-        }
-      });
-      
-      // Split by double newlines for paragraphs
-      const paragraphs = text.split('\n\n');
-      paragraphs.forEach(para => {
-        if (para.trim()) {
-          const formatted = para.replace(/\n/g, '<br>');
-          html += `<p class="mb-4">${formatted}</p>`;
-        }
-      });
+    // Route based on block type
+    switch (block._type) {
+      case 'block':
+        html += renderTextBlock(block);
+        break;
+      case 'image':
+        html += renderImage(block);
+        break;
+      case 'code':
+        html += renderCodeBlock(block);
+        break;
+      default:
+        console.warn(`Unknown block type: ${block._type}`);
     }
   });
   
   return html;
 }
 
+// Handle text blocks with different styles
+function renderTextBlock(block) {
+  if (!block.children) return '';
+  
+  // Process children to handle marks
+  let content = '';
+  block.children.forEach(child => {
+    if (child._type === 'span' && child.text) {
+      content += processMarks(child, block.markDefs || []);
+    }
+  });
+  
+  // Handle different block styles
+  switch (block.style) {
+    case 'h1':
+      return `<h1 class="text-4xl font-bold mt-8 mb-4">${content}</h1>`;
+    case 'h2':
+      return `<h2 class="text-3xl font-bold mt-6 mb-3">${content}</h2>`;
+    case 'h3':
+      return `<h3 class="text-2xl font-semibold mt-4 mb-2">${content}</h3>`;
+    case 'h4':
+      return `<h4 class="text-xl font-semibold mt-3 mb-2">${content}</h4>`;
+    case 'blockquote':
+      return `<blockquote class="border-l-4 border-emerald-500 pl-4 italic my-4">${content}</blockquote>`;
+    case 'normal':
+    default:
+      // For normal paragraphs, handle newlines
+      if (content.includes('\n\n')) {
+        return content.split('\n\n').map(para => 
+          para.trim() ? `<p class="mb-4">${para.replace(/\n/g, '<br>')}</p>` : ''
+        ).join('');
+      } else {
+        const formatted = content.replace(/\n/g, '<br>');
+        return `<p class="mb-4">${formatted}</p>`;
+      }
+  }
+  
+  // Handle list items
+  if (block.listItem) {
+    const listContent = `<li>${content}</li>`;
+    // Note: In a real implementation, you'd need to group consecutive list items
+    return block.listItem === 'bullet' 
+      ? `<ul class="list-disc list-inside mb-4">${listContent}</ul>`
+      : `<ol class="list-decimal list-inside mb-4">${listContent}</ol>`;
+  }
+}
+
+// Process marks (bold, italic, links, etc.)
+function processMarks(span, markDefs) {
+  let text = span.text;
+  
+  if (!span.marks || span.marks.length === 0) {
+    return text;
+  }
+  
+  // Apply marks in reverse order to handle nesting properly
+  const marks = [...span.marks].reverse();
+  
+  marks.forEach(mark => {
+    // Check if it's a mark definition (like a link)
+    const markDef = markDefs.find(def => def._key === mark);
+    if (markDef) {
+      switch (markDef._type) {
+        case 'link':
+          text = `<a href="${markDef.href}" class="text-emerald-400 hover:text-emerald-300 underline" target="_blank" rel="noopener">${text}</a>`;
+          break;
+      }
+    } else {
+      // Handle decorators
+      switch (mark) {
+        case 'strong':
+          text = `<strong class="font-semibold">${text}</strong>`;
+          break;
+        case 'em':
+          text = `<em>${text}</em>`;
+          break;
+        case 'code':
+          text = `<code class="bg-slate-800 px-1 py-0.5 rounded text-emerald-400">${text}</code>`;
+          break;
+        case 'underline':
+          text = `<span class="underline">${text}</span>`;
+          break;
+        case 'strike-through':
+          text = `<s>${text}</s>`;
+          break;
+      }
+    }
+  });
+  
+  return text;
+}
+
+// Render images
+function renderImage(block) {
+  if (!block.asset) return '';
+  
+  try {
+    const imageUrl = urlForImage(block).width(800).url();
+    const alt = block.alt || '';
+    const caption = block.caption || '';
+    
+    return `
+      <figure class="my-6">
+        <img src="${imageUrl}" alt="${alt}" class="w-full rounded-lg shadow-xl" />
+        ${caption ? `<figcaption class="text-center text-sm text-slate-400 mt-2">${caption}</figcaption>` : ''}
+      </figure>
+    `;
+  } catch (error) {
+    console.error('Error rendering image:', error);
+    return '';
+  }
+}
+
+// Render code blocks
+function renderCodeBlock(block) {
+  const code = block.code || '';
+  const language = block.language || 'plaintext';
+  const filename = block.filename || '';
+  
+  return `
+    <div class="my-6">
+      ${filename ? `<div class="text-sm text-slate-400 mb-1">${filename}</div>` : ''}
+      <pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto">
+        <code class="language-${language}">${escapeHtml(code)}</code>
+      </pre>
+    </div>
+  `;
+}
+
+// Helper to escape HTML in code blocks
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Render the content
 const bodyHtml = renderContent(post.body);
 const heroImageUrl = post.heroImage ? urlForImage(post.heroImage).width(1200).height(600).url() : null;
+
+// Debug logging
+console.log('Rendering blog post:', post.title);
+console.log('Number of blocks:', post.body?.length || 0);
 ---
 
 <html lang="en">
@@ -112,9 +241,8 @@ const heroImageUrl = post.heroImage ? urlForImage(post.heroImage).width(1200).he
             prose-pre:bg-slate-800 prose-pre:border prose-pre:border-slate-700
             prose-blockquote:border-l-4 prose-blockquote:border-emerald-500 prose-blockquote:pl-4 prose-blockquote:italic
             prose-ul:text-slate-300 prose-li:text-slate-300
-            prose-img:rounded-lg prose-img:shadow-xl">
-            <div set:html={bodyHtml} />
-          </div>
+            prose-img:rounded-lg prose-img:shadow-xl"
+            set:html={bodyHtml} />
           
           <!-- Navigation -->
           <div class="mt-16 pt-8 border-t border-slate-700">
