@@ -17,43 +17,166 @@ if (!post) {
 // Cache settings
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
 
-// Simple function to render Portable Text
+// Helper function to render images with error handling
+function renderImage(block) {
+  try {
+    if (!block.asset || !block.asset._ref) {
+      console.error('Image block missing asset reference:', block);
+      return ''; // Return empty string instead of throwing
+    }
+    const imageUrl = urlForImage(block).width(800).url();
+    return `<img src="${imageUrl}" alt="${block.alt || ''}" class="rounded-lg shadow-xl my-6 w-full" />`;
+  } catch (error) {
+    console.error('Error rendering image:', error, block);
+    return ''; // Return empty string on error
+  }
+}
+
+// Complete function to render Portable Text with all block types
 function renderContent(blocks) {
   if (!blocks || !Array.isArray(blocks)) return '';
   
   let html = '';
+  let listItems = [];
+  let currentListType = null;
+  
+  // Helper to close any open list
+  const closeList = () => {
+    if (listItems.length > 0) {
+      const tag = currentListType === 'number' ? 'ol' : 'ul';
+      const listClass = currentListType === 'number' ? 'list-decimal' : 'list-disc';
+      html += `<${tag} class="${listClass} list-inside mb-4 space-y-2">`;
+      listItems.forEach(item => {
+        html += `<li class="text-slate-300">${item}</li>`;
+      });
+      html += `</${tag}>`;
+      listItems = [];
+      currentListType = null;
+    }
+  };
   
   blocks.forEach(block => {
-    if (block._type === 'block' && block.children) {
-      let text = '';
-      block.children.forEach(child => {
-        if (child.text) {
-          let segment = child.text;
+    try {
+      // Handle different block types
+      if (block._type === 'block') {
+        // Check if this is a list item
+        if (block.listItem) {
+          // If switching list types, close previous list
+          if (currentListType && currentListType !== block.listItem) {
+            closeList();
+          }
+          currentListType = block.listItem;
           
-          // Handle links
-          if (child.marks && block.markDefs) {
-            child.marks.forEach(mark => {
-              const markDef = block.markDefs.find(def => def._key === mark);
-              if (markDef && markDef._type === 'link') {
-                segment = `<a href="${markDef.href}" class="text-emerald-400 hover:text-emerald-300 underline">${segment}</a>`;
+          // Extract text from children
+          let text = '';
+          if (block.children) {
+            block.children.forEach(child => {
+              if (child.text) {
+                let segment = child.text;
+                
+                // Handle marks (bold, italic, etc)
+                if (child.marks && child.marks.length > 0) {
+                  child.marks.forEach(mark => {
+                    if (mark === 'strong') {
+                      segment = `<strong class="font-semibold text-white">${segment}</strong>`;
+                    } else if (mark === 'em') {
+                      segment = `<em>${segment}</em>`;
+                    } else if (mark === 'code') {
+                      segment = `<code class="text-emerald-400 bg-slate-800 px-1 py-0.5 rounded">${segment}</code>`;
+                    } else if (block.markDefs) {
+                      // Handle links
+                      const markDef = block.markDefs.find(def => def._key === mark);
+                      if (markDef && markDef._type === 'link') {
+                        segment = `<a href="${markDef.href}" class="text-emerald-400 hover:text-emerald-300 underline">${segment}</a>`;
+                      }
+                    }
+                  });
+                }
+                
+                text += segment;
               }
             });
           }
           
-          text += segment;
+          listItems.push(text);
+        } else {
+          // Not a list item - close any open list first
+          closeList();
+          
+          // Handle different text styles
+          const style = block.style || 'normal';
+          let text = '';
+          
+          if (block.children) {
+            block.children.forEach(child => {
+              if (child.text) {
+                let segment = child.text;
+                
+                // Handle marks
+                if (child.marks && child.marks.length > 0) {
+                  child.marks.forEach(mark => {
+                    if (mark === 'strong') {
+                      segment = `<strong class="font-semibold text-white">${segment}</strong>`;
+                    } else if (mark === 'em') {
+                      segment = `<em>${segment}</em>`;
+                    } else if (mark === 'code') {
+                      segment = `<code class="text-emerald-400 bg-slate-800 px-1 py-0.5 rounded">${segment}</code>`;
+                    } else if (block.markDefs) {
+                      const markDef = block.markDefs.find(def => def._key === mark);
+                      if (markDef && markDef._type === 'link') {
+                        segment = `<a href="${markDef.href}" class="text-emerald-400 hover:text-emerald-300 underline">${segment}</a>`;
+                      }
+                    }
+                  });
+                }
+                
+                text += segment;
+              }
+            });
+          }
+          
+          // Apply appropriate HTML tag based on style
+          switch (style) {
+            case 'h1':
+              html += `<h1 class="text-4xl font-bold text-white mb-4 mt-8">${text}</h1>`;
+              break;
+            case 'h2':
+              html += `<h2 class="text-3xl font-bold text-white mb-4 mt-8">${text}</h2>`;
+              break;
+            case 'h3':
+              html += `<h3 class="text-2xl font-semibold text-white mb-3 mt-6">${text}</h3>`;
+              break;
+            case 'h4':
+              html += `<h4 class="text-xl font-semibold text-white mb-3 mt-4">${text}</h4>`;
+              break;
+            case 'blockquote':
+              html += `<blockquote class="border-l-4 border-emerald-500 pl-4 italic mb-4 text-slate-300">${text}</blockquote>`;
+              break;
+            case 'normal':
+            default:
+              if (text.trim()) {
+                html += `<p class="text-slate-300 mb-4 leading-relaxed">${text}</p>`;
+              }
+              break;
+          }
         }
-      });
-      
-      // Split by double newlines for paragraphs
-      const paragraphs = text.split('\n\n');
-      paragraphs.forEach(para => {
-        if (para.trim()) {
-          const formatted = para.replace(/\n/g, '<br>');
-          html += `<p class="mb-4">${formatted}</p>`;
-        }
-      });
+      } else if (block._type === 'image') {
+        closeList(); // Close any open list before image
+        html += renderImage(block);
+      } else if (block._type === 'code') {
+        closeList(); // Close any open list before code
+        const language = block.language || 'text';
+        const code = block.code || '';
+        html += `<pre class="bg-slate-800 border border-slate-700 rounded-lg p-4 mb-4 overflow-x-auto"><code class="language-${language} text-slate-300">${code}</code></pre>`;
+      }
+    } catch (error) {
+      console.error('Error rendering block:', error, block);
+      // Continue with next block instead of breaking entire render
     }
   });
+  
+  // Close any remaining open list
+  closeList();
   
   return html;
 }
@@ -66,8 +189,23 @@ if (post.body && post.body[0]) {
   console.log('First block:', JSON.stringify(post.body[0], null, 2));
 }
 
-const bodyHtml = renderContent(post.body);
-const heroImageUrl = post.heroImage ? urlForImage(post.heroImage).width(1200).height(600).url() : null;
+// Wrap rendering in try-catch to prevent 500 errors
+let bodyHtml = '';
+let heroImageUrl = null;
+
+try {
+  bodyHtml = renderContent(post.body);
+} catch (error) {
+  console.error('Error rendering content:', error);
+  bodyHtml = '<p class="text-red-400">Error rendering content. Please check the console for details.</p>';
+}
+
+try {
+  heroImageUrl = post.heroImage ? urlForImage(post.heroImage).width(1200).height(600).url() : null;
+} catch (error) {
+  console.error('Error rendering hero image:', error);
+  heroImageUrl = null;
+}
 
 console.log('Rendered HTML length:', bodyHtml.length);
 ---
