@@ -15,9 +15,6 @@ const posts = await client.fetch(postsQuery);
 Astro.response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
 Astro.response.headers.set('CDN-Cache-Control', 'no-cache');
 
-// Debug logging
-console.log('Blog list page - Posts fetched:', posts.length);
-console.log('First post:', posts[0] ? posts[0].title : 'No posts');
 
 // Calculate read time
 const calculateReadTime = (content: any) => {
