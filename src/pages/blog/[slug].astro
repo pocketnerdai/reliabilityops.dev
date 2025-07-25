@@ -2,6 +2,7 @@
 import BlogPost from '../../layouts/BlogPost.astro';
 import { client } from '../../sanity/lib/client';
 import { postBySlugQuery } from '../../sanity/lib/queries';
+import { urlForImage } from '../../sanity/lib/image';
 
 const { slug } = Astro.params;
 const post = await client.fetch(postBySlugQuery, { slug });
@@ -10,22 +11,54 @@ if (!post) {
   return Astro.redirect('/404');
 }
 
-// Cache individual posts for 1 hour
+// Cache settings
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
-Astro.response.headers.set('CDN-Cache-Control', 'public, max-age=3600');
 
-// Extract plain text from body for now
-let bodyContent = '';
-if (post.body && Array.isArray(post.body)) {
-  bodyContent = post.body.map(block => {
+// Simple function to convert Portable Text to HTML
+function renderContent(blocks) {
+  if (!blocks || !Array.isArray(blocks)) return '';
+  
+  let html = '';
+  
+  blocks.forEach(block => {
     if (block._type === 'block' && block.children) {
-      return block.children.map(child => child.text || '').join('');
+      // Extract text from children
+      let text = '';
+      block.children.forEach(child => {
+        if (child.text) {
+          let segment = child.text;
+          
+          // Handle links
+          if (child.marks && block.markDefs) {
+            child.marks.forEach(mark => {
+              const markDef = block.markDefs.find(def => def._key === mark);
+              if (markDef && markDef._type === 'link') {
+                segment = `<a href="${markDef.href}" class="text-emerald-400 hover:underline" target="_blank">${segment}</a>`;
+              }
+            });
+          }
+          
+          text += segment;
+        }
+      });
+      
+      // Split by double newlines for paragraphs
+      const paragraphs = text.split('\n\n');
+      paragraphs.forEach(para => {
+        if (para.trim()) {
+          // Replace single newlines with <br>
+          const formatted = para.replace(/\n/g, '<br>');
+          html += `<p class="mb-4">${formatted}</p>`;
+        }
+      });
     }
-    return '';
-  }).join('\n\n');
+  });
+  
+  return html;
 }
 
-// Transform Sanity data to match BlogPost layout expectations
+const bodyHtml = renderContent(post.body);
+
 const postData = {
   title: post.title,
   description: post.excerpt,
@@ -36,8 +69,6 @@ const postData = {
 
 <BlogPost {...postData}>
   <div class="prose prose-lg prose-invert max-w-none">
-    <div class="whitespace-pre-wrap text-slate-300">
-      {bodyContent}
-    </div>
+    <div set:html={bodyHtml} />
   </div>
 </BlogPost>
