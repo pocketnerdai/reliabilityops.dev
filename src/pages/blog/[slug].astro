@@ -1,12 +1,9 @@
 ---
-import { type SanityDocument } from '@sanity/client';
-import { PortableText } from 'astro-portabletext';
+import { toHTML } from '@portabletext/to-html';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { client } from '../../sanity/lib/client';
 import { postBySlugQuery } from '../../sanity/lib/queries';
 import { urlForImage } from '../../sanity/lib/image';
-
-// Remove getStaticPaths - we're using SSR, not static generation
 
 const { slug } = Astro.params;
 const post = await client.fetch(postBySlugQuery, { slug });
@@ -19,51 +16,41 @@ if (!post) {
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
 Astro.response.headers.set('CDN-Cache-Control', 'public, max-age=3600');
 
+// Convert Portable Text to HTML
+const bodyHtml = post.body ? toHTML(post.body, {
+  components: {
+    types: {
+      image: ({value}) => {
+        const imageUrl = urlForImage(value).url();
+        return `<img src="${imageUrl}" alt="${value.alt || ''}" class="w-full rounded-lg my-6" />`;
+      },
+      code: ({value}) => {
+        const code = value.code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return `<pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto my-6"><code>${code}</code></pre>`;
+      }
+    },
+    marks: {
+      code: ({children}) => `<code class="bg-slate-800 px-1 py-0.5 rounded">${children}</code>`
+    },
+    block: {
+      h1: ({children}) => `<h1 class="text-4xl font-bold mt-8 mb-4">${children}</h1>`,
+      h2: ({children}) => `<h2 class="text-3xl font-bold mt-6 mb-3">${children}</h2>`,
+      h3: ({children}) => `<h3 class="text-2xl font-bold mt-4 mb-2">${children}</h3>`,
+      normal: ({children}) => `<p class="mb-4">${children}</p>`,
+      blockquote: ({children}) => `<blockquote class="border-l-4 border-emerald-500 pl-4 italic">${children}</blockquote>`,
+    }
+  }
+}) : '';
+
 // Transform Sanity data to match BlogPost layout expectations
 const postData = {
   title: post.title,
   description: post.excerpt,
   pubDate: new Date(post.publishedAt),
   heroImage: post.heroImage,
-  // We'll handle body content separately
 };
 ---
 
 <BlogPost {...postData}>
-  <!-- Render Portable Text content -->
-  <div class="prose prose-lg prose-invert max-w-none">
-    {post.body && (
-      <PortableText 
-        value={post.body}
-        components={{
-          block: {
-            h1: ({children}) => <h1 class="text-4xl font-bold mt-8 mb-4">{children}</h1>,
-            h2: ({children}) => <h2 class="text-3xl font-bold mt-6 mb-3">{children}</h2>,
-            h3: ({children}) => <h3 class="text-2xl font-bold mt-4 mb-2">{children}</h3>,
-            normal: ({children}) => <p class="mb-4">{children}</p>,
-            blockquote: ({children}) => <blockquote class="border-l-4 border-emerald-500 pl-4 italic">{children}</blockquote>,
-          },
-          marks: {
-            code: ({children}) => <code class="bg-slate-800 px-1 py-0.5 rounded">{children}</code>,
-          },
-          types: {
-            image: ({value}) => (
-              <img 
-                src={urlForImage(value).url()} 
-                alt={value.alt || ''} 
-                class="w-full rounded-lg my-6"
-              />
-            ),
-            code: ({value}) => (
-              <pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto my-6">
-                <code>
-                  {value.code}
-                </code>
-              </pre>
-            ),
-          }
-        }}
-      />
-    )}
-  </div>
+  <div class="prose prose-lg prose-invert max-w-none" set:html={bodyHtml} />
 </BlogPost>
