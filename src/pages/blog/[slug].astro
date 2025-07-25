@@ -1,8 +1,6 @@
 ---
-import BlogPost from '../../layouts/BlogPost.astro';
 import { client } from '../../sanity/lib/client';
 import { postBySlugQuery } from '../../sanity/lib/queries';
-import { urlForImage } from '../../sanity/lib/image';
 
 const { slug } = Astro.params;
 const post = await client.fetch(postBySlugQuery, { slug });
@@ -10,72 +8,32 @@ const post = await client.fetch(postBySlugQuery, { slug });
 if (!post) {
   return Astro.redirect('/404');
 }
-
-// Cache settings
-Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
-
-// Simple function to extract plain text
-function extractText(blocks) {
-  if (!blocks || !Array.isArray(blocks)) return '';
-  
-  let text = '';
-  
-  blocks.forEach(block => {
-    if (block._type === 'block' && block.children) {
-      block.children.forEach(child => {
-        if (child.text) {
-          text += child.text;
-        }
-      });
-    }
-  });
-  
-  return text;
-}
-
-// Extract plain text
-const bodyText = extractText(post.body);
-
-// Test with hardcoded content
-const testHtml = '<p class="mb-4">This is a test paragraph.</p><p class="mb-4">If you can see this, HTML rendering works.</p>';
-
-// Log for debugging
-console.log('Post title:', post.title);
-console.log('Body text length:', bodyText.length);
-console.log('First 100 chars of body:', bodyText.substring(0, 100));
-
-const postData = {
-  title: post.title,
-  description: post.excerpt,
-  pubDate: new Date(post.publishedAt),
-  heroImage: post.heroImage,
-};
 ---
 
-<BlogPost {...postData}>
-  <div class="prose prose-lg prose-invert max-w-none">
-    <!-- Test 1: Hardcoded HTML with set:html -->
-    <div class="mb-8 p-4 bg-slate-800 rounded">
-      <h3 class="text-emerald-400 mb-2">Test 1: Hardcoded HTML</h3>
-      <div set:html={testHtml} />
-    </div>
-    
-    <!-- Test 2: Direct text interpolation -->
-    <div class="mb-8 p-4 bg-slate-800 rounded">
-      <h3 class="text-emerald-400 mb-2">Test 2: Direct Text</h3>
-      <div class="whitespace-pre-wrap">{bodyText}</div>
-    </div>
-    
-    <!-- Test 3: Fragment with set:html -->
-    <div class="mb-8 p-4 bg-slate-800 rounded">
-      <h3 class="text-emerald-400 mb-2">Test 3: Fragment HTML</h3>
-      <Fragment set:html={testHtml} />
-    </div>
-    
-    <!-- Test 4: Static HTML -->
-    <div class="mb-8 p-4 bg-slate-800 rounded">
-      <h3 class="text-emerald-400 mb-2">Test 4: Static HTML</h3>
-      <p>If you can see this, basic HTML works.</p>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{post.title}</title>
+</head>
+<body style="background: #0f172a; color: white; padding: 2rem;">
+  <h1>Debug: {post.title}</h1>
+  
+  <div style="background: #1e293b; padding: 1rem; margin: 1rem 0;">
+    <h2>Test 1: Static Content</h2>
+    <p>If you can see this text, the page is rendering.</p>
   </div>
-</BlogPost>
+  
+  <div style="background: #1e293b; padding: 1rem; margin: 1rem 0;">
+    <h2>Test 2: Post Data</h2>
+    <p>Title: {post.title}</p>
+    <p>Has body: {post.body ? 'Yes' : 'No'}</p>
+  </div>
+  
+  <div style="background: #1e293b; padding: 1rem; margin: 1rem 0;">
+    <h2>Test 3: Body Content</h2>
+    <pre>{JSON.stringify(post.body?.[0], null, 2)}</pre>
+  </div>
+</body>
+</html>
