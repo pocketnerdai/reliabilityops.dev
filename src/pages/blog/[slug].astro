@@ -1,16 +1,12 @@
 ---
 import { type SanityDocument } from '@sanity/client';
+import { PortableText } from 'astro-portabletext';
 import BlogPost from '../../layouts/BlogPost.astro';
 import { client } from '../../sanity/lib/client';
 import { postBySlugQuery } from '../../sanity/lib/queries';
+import { urlForImage } from '../../sanity/lib/image';
 
-export async function getStaticPaths() {
-  const posts = await client.fetch(`*[_type == "post"] { slug }`);
-  
-  return posts.map((post: any) => ({
-    params: { slug: post.slug.current },
-  }));
-}
+// Remove getStaticPaths - we're using SSR, not static generation
 
 const { slug } = Astro.params;
 const post = await client.fetch(postBySlugQuery, { slug });
@@ -18,6 +14,10 @@ const post = await client.fetch(postBySlugQuery, { slug });
 if (!post) {
   return Astro.redirect('/404');
 }
+
+// Cache individual posts for 1 hour
+Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
+Astro.response.headers.set('CDN-Cache-Control', 'public, max-age=3600');
 
 // Transform Sanity data to match BlogPost layout expectations
 const postData = {
@@ -30,18 +30,40 @@ const postData = {
 ---
 
 <BlogPost {...postData}>
-  <!-- Render Portable Text content here -->
+  <!-- Render Portable Text content -->
   <div class="prose prose-lg prose-invert max-w-none">
     {post.body && (
-      <Fragment>
-        <!-- For now, show a message. We'll implement PortableText rendering next -->
-        <p class="text-slate-300">
-          Content rendering will be implemented with PortableText component.
-        </p>
-        <pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto">
-          <code>{JSON.stringify(post.body, null, 2)}</code>
-        </pre>
-      </Fragment>
+      <PortableText 
+        value={post.body}
+        components={{
+          block: {
+            h1: ({children}) => <h1 class="text-4xl font-bold mt-8 mb-4">{children}</h1>,
+            h2: ({children}) => <h2 class="text-3xl font-bold mt-6 mb-3">{children}</h2>,
+            h3: ({children}) => <h3 class="text-2xl font-bold mt-4 mb-2">{children}</h3>,
+            normal: ({children}) => <p class="mb-4">{children}</p>,
+            blockquote: ({children}) => <blockquote class="border-l-4 border-emerald-500 pl-4 italic">{children}</blockquote>,
+          },
+          marks: {
+            code: ({children}) => <code class="bg-slate-800 px-1 py-0.5 rounded">{children}</code>,
+          },
+          types: {
+            image: ({value}) => (
+              <img 
+                src={urlForImage(value).url()} 
+                alt={value.alt || ''} 
+                class="w-full rounded-lg my-6"
+              />
+            ),
+            code: ({value}) => (
+              <pre class="bg-slate-800 p-4 rounded-lg overflow-x-auto my-6">
+                <code class={`language-${value.language || 'plaintext'}`}>
+                  {value.code}
+                </code>
+              </pre>
+            ),
+          }
+        }}
+      />
     )}
   </div>
 </BlogPost>
