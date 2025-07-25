@@ -49,7 +49,7 @@ const calculateReadTime = (content: any) => {
                 title={post.title}
                 excerpt={post.excerpt}
                 date={new Date(post.publishedAt)}
-                slug={post.slug.current}
+                slug={post.slug?.current || post.slug}
                 readTime={post.readTime || calculateReadTime(post)}
                 tags={post.categories || ['SRE', 'AI']}
               />

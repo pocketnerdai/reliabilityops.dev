@@ -16,6 +16,11 @@ if (!post) {
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
 Astro.response.headers.set('CDN-Cache-Control', 'public, max-age=3600');
 
+// Debug: Log the post data
+console.log('Post data:', JSON.stringify(post, null, 2));
+console.log('Post body exists:', !!post.body);
+console.log('Post body type:', typeof post.body);
+
 // Convert Portable Text to HTML
 const bodyHtml = post.body ? toHTML(post.body, {
   components: {
@@ -52,5 +57,16 @@ const postData = {
 ---
 
 <BlogPost {...postData}>
-  <div class="prose prose-lg prose-invert max-w-none" set:html={bodyHtml} />
+  <div class="prose prose-lg prose-invert max-w-none">
+    {bodyHtml ? (
+      <div set:html={bodyHtml} />
+    ) : (
+      <div class="text-slate-300">
+        <p>No content available for this post.</p>
+        <pre class="bg-slate-800 p-4 rounded mt-4">
+          {JSON.stringify(post, null, 2)}
+        </pre>
+      </div>
+    )}
+  </div>
 </BlogPost>
