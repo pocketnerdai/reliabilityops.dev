@@ -1,0 +1,209 @@
+---
+// Hero section with animated gradient background
+---
+
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <!-- Animated gradient background -->
+  <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-emerald-900/20 to-slate-900 animate-gradient"></div>
+  
+  <!-- Floating geometric shapes -->
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl animate-float"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl animate-float-delayed"></div>
+    <div class="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-float-slow"></div>
+  </div>
+
+  <!-- Glassmorphism overlay -->
+  <div class="absolute inset-0 backdrop-blur-[1px]"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 container mx-auto px-4 text-center">
+    <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 animate-text-reveal">
+      <span class="block">Preventing Outages</span>
+      <span class="block text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+        Before They Happen
+      </span>
+    </h1>
+    
+    <p class="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto animate-fade-in-up" style="animation-delay: 0.2s;">
+      Proactive Reliability Through 
+      <span class="typing-container">
+        <span class="typing-text">Predictive Intelligence</span>
+      </span>
+    </p>
+
+    <div class="animate-fade-in-up" style="animation-delay: 0.4s;">
+      <a 
+        href="#latest-posts" 
+        class="inline-flex items-center gap-3 px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-lg transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-emerald-500/25"
+      >
+        Read the Blog
+        <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Military precision badge -->
+    <div class="mt-12 animate-fade-in-up" style="animation-delay: 0.6s;">
+      <div class="inline-flex items-center gap-2 px-4 py-2 bg-slate-800/50 backdrop-blur-md border border-emerald-500/30 rounded-full">
+        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+        <span class="text-sm text-slate-300">Military-Trained SRE • 15+ Years Experience</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-fade-in-up" style="animation-delay: 0.8s;">
+    <a href="#services" class="text-slate-400 hover:text-emerald-400 transition-colors">
+      <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<style>
+  @keyframes gradient {
+    0%, 100% {
+      background-size: 200% 200%;
+      background-position: 0% 50%;
+    }
+    50% {
+      background-size: 200% 200%;
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translate(-20px, -20px) scale(1);
+    }
+    33% {
+      transform: translate(20px, -30px) scale(1.05);
+    }
+    66% {
+      transform: translate(-10px, 20px) scale(0.95);
+    }
+  }
+
+  @keyframes float-delayed {
+    0%, 100% {
+      transform: translate(20px, 20px) scale(1);
+    }
+    33% {
+      transform: translate(-30px, 10px) scale(1.05);
+    }
+    66% {
+      transform: translate(10px, -20px) scale(0.95);
+    }
+  }
+
+  @keyframes float-slow {
+    0%, 100% {
+      transform: translate(-30px, 0) scale(1);
+    }
+    50% {
+      transform: translate(30px, -20px) scale(1.1);
+    }
+  }
+
+  @keyframes text-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-gradient {
+    animation: gradient 15s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  .animate-float {
+    animation: float 20s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float-delayed 25s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 30s ease-in-out infinite;
+  }
+
+  .animate-text-reveal {
+    animation: text-reveal 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in-up {
+    opacity: 0;
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  /* Typing effect styles */
+  .typing-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .typing-text {
+    color: #10b981;
+    font-weight: 600;
+  }
+
+  .typing-text::after {
+    content: '|';
+    position: absolute;
+    right: -10px;
+    color: #10b981;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% {
+      opacity: 1;
+    }
+    51%, 100% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  // Simple typing effect for the subtitle
+  const typingTexts = ['Predictive Intelligence', 'AI-Driven Insights', 'Smart Automation'];
+  let currentIndex = 0;
+  
+  function typeText() {
+    const element = document.querySelector('.typing-text');
+    if (!element) return;
+    
+    const nextText = typingTexts[currentIndex];
+    element.style.opacity = '0';
+    
+    setTimeout(() => {
+      element.textContent = nextText;
+      element.style.opacity = '1';
+      currentIndex = (currentIndex + 1) % typingTexts.length;
+    }, 300);
+  }
+  
+  // Change text every 3 seconds
+  setInterval(typeText, 3000);
+</script>
