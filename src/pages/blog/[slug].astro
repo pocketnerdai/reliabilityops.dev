@@ -14,50 +14,35 @@ if (!post) {
 // Cache settings
 Astro.response.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=300');
 
-// Simple function to convert Portable Text to HTML
-function renderContent(blocks) {
+// Simple function to extract plain text
+function extractText(blocks) {
   if (!blocks || !Array.isArray(blocks)) return '';
   
-  let html = '';
+  let text = '';
   
   blocks.forEach(block => {
     if (block._type === 'block' && block.children) {
-      // Extract text from children
-      let text = '';
       block.children.forEach(child => {
         if (child.text) {
-          let segment = child.text;
-          
-          // Handle links
-          if (child.marks && block.markDefs) {
-            child.marks.forEach(mark => {
-              const markDef = block.markDefs.find(def => def._key === mark);
-              if (markDef && markDef._type === 'link') {
-                segment = `<a href="${markDef.href}" class="text-emerald-400 hover:underline" target="_blank">${segment}</a>`;
-              }
-            });
-          }
-          
-          text += segment;
-        }
-      });
-      
-      // Split by double newlines for paragraphs
-      const paragraphs = text.split('\n\n');
-      paragraphs.forEach(para => {
-        if (para.trim()) {
-          // Replace single newlines with <br>
-          const formatted = para.replace(/\n/g, '<br>');
-          html += `<p class="mb-4">${formatted}</p>`;
+          text += child.text;
         }
       });
     }
   });
   
-  return html;
+  return text;
 }
 
-const bodyHtml = renderContent(post.body);
+// Extract plain text
+const bodyText = extractText(post.body);
+
+// Test with hardcoded content
+const testHtml = '<p class="mb-4">This is a test paragraph.</p><p class="mb-4">If you can see this, HTML rendering works.</p>';
+
+// Log for debugging
+console.log('Post title:', post.title);
+console.log('Body text length:', bodyText.length);
+console.log('First 100 chars of body:', bodyText.substring(0, 100));
 
 const postData = {
   title: post.title,
@@ -69,6 +54,28 @@ const postData = {
 
 <BlogPost {...postData}>
   <div class="prose prose-lg prose-invert max-w-none">
-    <div set:html={bodyHtml} />
+    <!-- Test 1: Hardcoded HTML with set:html -->
+    <div class="mb-8 p-4 bg-slate-800 rounded">
+      <h3 class="text-emerald-400 mb-2">Test 1: Hardcoded HTML</h3>
+      <div set:html={testHtml} />
+    </div>
+    
+    <!-- Test 2: Direct text interpolation -->
+    <div class="mb-8 p-4 bg-slate-800 rounded">
+      <h3 class="text-emerald-400 mb-2">Test 2: Direct Text</h3>
+      <div class="whitespace-pre-wrap">{bodyText}</div>
+    </div>
+    
+    <!-- Test 3: Fragment with set:html -->
+    <div class="mb-8 p-4 bg-slate-800 rounded">
+      <h3 class="text-emerald-400 mb-2">Test 3: Fragment HTML</h3>
+      <Fragment set:html={testHtml} />
+    </div>
+    
+    <!-- Test 4: Static HTML -->
+    <div class="mb-8 p-4 bg-slate-800 rounded">
+      <h3 class="text-emerald-400 mb-2">Test 4: Static HTML</h3>
+      <p>If you can see this, basic HTML works.</p>
+    </div>
   </div>
 </BlogPost>
