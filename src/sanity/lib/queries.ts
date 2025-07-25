@@ -2,7 +2,7 @@ import groq from 'groq';
 
 // Post queries
 export const postsQuery = groq`
-  *[_type == "post"] | order(publishedAt desc) {
+  *[_type == "post" && publishedAt <= now()] | order(publishedAt desc) {
     _id,
     title,
     slug,
