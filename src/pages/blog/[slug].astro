@@ -30,13 +30,22 @@ const bodyHtml = post.body ? toHTML(post.body, {
       }
     },
     marks: {
-      code: ({children}) => `<code class="bg-slate-800 px-1 py-0.5 rounded">${children}</code>`
+      code: ({children}) => `<code class="bg-slate-800 px-1 py-0.5 rounded">${children}</code>`,
+      link: ({children, value}) => `<a href="${value.href}" class="text-emerald-400 hover:text-emerald-300 underline" target="_blank" rel="noopener">${children}</a>`
     },
     block: {
       h1: ({children}) => `<h1 class="text-4xl font-bold mt-8 mb-4">${children}</h1>`,
       h2: ({children}) => `<h2 class="text-3xl font-bold mt-6 mb-3">${children}</h2>`,
       h3: ({children}) => `<h3 class="text-2xl font-bold mt-4 mb-2">${children}</h3>`,
-      normal: ({children}) => `<p class="mb-4">${children}</p>`,
+      normal: ({children}) => {
+        // Handle newlines within blocks by converting to <br> tags
+        const text = children.join('');
+        const paragraphs = text.split('\n\n');
+        return paragraphs.map(p => {
+          const formatted = p.replace(/\n/g, '<br />');
+          return `<p class="mb-4">${formatted}</p>`;
+        }).join('');
+      },
       blockquote: ({children}) => `<blockquote class="border-l-4 border-emerald-500 pl-4 italic">${children}</blockquote>`,
     }
   }
@@ -52,16 +61,5 @@ const postData = {
 ---
 
 <BlogPost {...postData}>
-  <div class="prose prose-lg prose-invert max-w-none">
-    {bodyHtml ? (
-      <div set:html={bodyHtml} />
-    ) : (
-      <div class="text-slate-300">
-        <p>No content available for this post.</p>
-        <pre class="bg-slate-800 p-4 rounded mt-4">
-          {JSON.stringify(post, null, 2)}
-        </pre>
-      </div>
-    )}
-  </div>
+  <div class="prose prose-lg prose-invert max-w-none" set:html={bodyHtml} />
 </BlogPost>
