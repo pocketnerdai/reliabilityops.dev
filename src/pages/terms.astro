@@ -1,0 +1,48 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const updated = 'June 18, 2026';
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Terms of Service - ${SITE_TITLE}`} description="The terms for using ReliabilityOps' website and free tools." />
+  </head>
+  <body>
+    <Header />
+    <main class="min-h-screen bg-slate-900 pt-24 pb-20">
+      <div class="container mx-auto px-4 max-w-3xl">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-3">Terms of Service</h1>
+        <p class="text-slate-400 mb-10">Last updated {updated}</p>
+        <div class="prose prose-lg prose-invert max-w-none prose-headings:text-white prose-p:text-slate-300 prose-li:text-slate-300 prose-a:text-emerald-400 prose-strong:text-white">
+          <p>By using reliabilityops.dev and its tools, you agree to these terms.</p>
+
+          <h2>The free tools</h2>
+          <p>Our browser-based tools (including the <a href="/tools/pdf-to-excel/">PDF SimConvertor</a>) are provided <strong>as-is</strong>, free for personal and business use. They process your files locally in your browser. While we work to make conversions accurate, we don't guarantee perfect results on every document — always review the output before relying on it.</p>
+
+          <h2>Acceptable use</h2>
+          <ul>
+            <li>Don't use the site or tools for anything unlawful, or to process data you don't have the right to.</li>
+            <li>Don't attempt to disrupt, overload, or reverse-engineer the service.</li>
+          </ul>
+
+          <h2>No warranty</h2>
+          <p>The site and tools are provided without warranties of any kind. To the fullest extent permitted by law, ReliabilityOps is not liable for any loss arising from use of the site or its tools.</p>
+
+          <h2>Consulting engagements</h2>
+          <p>Paid services are governed by a separate written agreement (statement of work). These terms cover only the public website and free tools.</p>
+
+          <h2>Changes</h2>
+          <p>We may update these terms; the "last updated" date reflects the latest version.</p>
+
+          <h2>Contact</h2>
+          <p><a href="/contact">Contact us</a> or email <a href="mailto:hello@reliabilityops.dev">hello@reliabilityops.dev</a> with any questions.</p>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

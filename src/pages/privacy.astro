@@ -1,0 +1,48 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const updated = 'June 18, 2026';
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Privacy Policy - ${SITE_TITLE}`} description="How ReliabilityOps handles your data and privacy." />
+  </head>
+  <body>
+    <Header />
+    <main class="min-h-screen bg-slate-900 pt-24 pb-20">
+      <div class="container mx-auto px-4 max-w-3xl">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-3">Privacy Policy</h1>
+        <p class="text-slate-400 mb-10">Last updated {updated}</p>
+        <div class="prose prose-lg prose-invert max-w-none prose-headings:text-white prose-p:text-slate-300 prose-li:text-slate-300 prose-a:text-emerald-400 prose-strong:text-white">
+          <p>ReliabilityOps ("we", "us") builds reliability, automation, and AI tooling. We keep data collection to the minimum needed to run this site and serve clients.</p>
+
+          <h2>What we collect</h2>
+          <ul>
+            <li><strong>Contact form</strong> — your name, email, and message, used only to reply to you.</li>
+            <li><strong>Basic analytics</strong> — privacy-respecting, aggregate page metrics (no cross-site tracking, no selling of data).</li>
+          </ul>
+
+          <h2>Our tools run in your browser</h2>
+          <p>Our free tools (including the <a href="/tools/pdf-to-excel/">PDF SimConvertor</a>) process your files <strong>entirely in your browser</strong>. Files you drop into them are <strong>never uploaded to our servers</strong> and never leave your device.</p>
+
+          <h2>How we use it</h2>
+          <p>To respond to inquiries, deliver services you've requested, and improve the site. We don't sell your data or share it with advertisers.</p>
+
+          <h2>Cookies</h2>
+          <p>We use only essential cookies needed for the site to function. No third-party advertising cookies.</p>
+
+          <h2>Your choices</h2>
+          <p>Email <a href="mailto:hello@reliabilityops.dev">hello@reliabilityops.dev</a> any time to access, correct, or delete information you've sent us.</p>
+
+          <h2>Contact</h2>
+          <p>Questions about this policy? <a href="/contact">Contact us</a> or email <a href="mailto:hello@reliabilityops.dev">hello@reliabilityops.dev</a>.</p>
+        </div>
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

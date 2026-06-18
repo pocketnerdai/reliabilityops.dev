@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PDF SimConvertor · PDF → Excel · reliabilityops.dev</title>
+<meta name="description" content="PDF SimConvertor — turn a PDF's tables into a clean, editable Excel/CSV file right in your browser. Your file never leaves your device.">
+<style>
+  :root{--bg:#0b0d10;--panel:#13171c;--panel2:#1a2027;--line:#262d36;--line2:#333c47;--ink:#e7ecf1;--mut:#8a95a3;--dim:#5b6573;--acc:#34d399;--acc2:#36d39a;--ok:#36d39a;--warn:#ffb454;--err:#ff6b6b}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 20px 80px}
+  .brand{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mut)}
+  .brand b{color:var(--acc)}
+  h1{font-size:clamp(28px,6vw,40px);line-height:1.05;letter-spacing:-.02em;margin:14px 0 8px;font-weight:800}
+  h1 em{font-style:normal;color:var(--acc2)}
+  .lede{color:var(--mut);font-size:16px;max-width:54ch;margin:0 0 26px}
+  .drop{border:1.5px dashed var(--line2);border-radius:18px;background:linear-gradient(180deg,var(--panel),var(--panel2));padding:42px 24px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+  .drop:hover,.drop.over{border-color:var(--acc);background:var(--panel2)}
+  .drop .big{font-size:18px;font-weight:700;margin:8px 0 4px}
+  .drop .sm{color:var(--mut);font-size:13px}
+  .drop svg{width:42px;height:42px;color:var(--acc)}
+  .priv{display:inline-flex;align-items:center;gap:7px;margin-top:18px;font-size:12.5px;color:var(--mut);background:rgba(54,211,154,.08);border:1px solid rgba(54,211,154,.25);border-radius:999px;padding:6px 13px}
+  .priv b{color:var(--ok)}
+  #status{margin:18px 0;font-size:14px;color:var(--mut);min-height:20px}
+  #status.err{color:var(--err)} #status.ok{color:var(--ok)} #status.work{color:var(--acc)}
+  .out{display:none;margin-top:22px}
+  .out.show{display:block}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--acc);color:#04121d;border:0;border-radius:11px;padding:12px 18px;font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit;text-decoration:none}
+  .btn.ghost{background:none;color:var(--ink);border:1px solid var(--line2)}
+  .btn:active{transform:scale(.98)}
+  .meta{color:var(--mut);font-size:13px;margin-left:auto}
+  .sheettabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .stab{font-family:ui-monospace,monospace;font-size:11.5px;color:var(--mut);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer}
+  .stab.on{background:var(--acc);color:#04121d;border-color:var(--acc)}
+  .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;max-height:440px;background:var(--panel)}
+  table{border-collapse:collapse;width:100%;font-size:13px}
+  td{border:1px solid var(--line);padding:6px 9px;white-space:nowrap;color:var(--ink)}
+  tr:first-child td{background:var(--panel2);font-weight:700;position:sticky;top:0}
+  td:focus{outline:2px solid var(--acc);outline-offset:-2px;background:rgba(63,182,255,.08);white-space:normal}
+  .optline{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--mut);margin:0 0 6px;cursor:pointer}
+  .optline input{width:17px;height:17px;accent-color:var(--acc)}
+  .editnote{font-size:12px;color:var(--dim);margin:0 0 10px}
+  .foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim);font-size:12.5px;line-height:1.6}
+  .foot a{color:var(--acc);text-decoration:none}
+  .hint{background:rgba(255,180,84,.08);border:1px solid rgba(255,180,84,.3);color:var(--warn);border-radius:11px;padding:12px 14px;font-size:13.5px;margin-top:14px;display:none}
+  .hint.show{display:block}
+</style></head>
+<body><div class="wrap">
+  <div class="brand">reliability<b>.dev</b> · tools</div>
+  <h1>PDF <em>SimConvertor</em></h1>
+  <p class="lede">Drop a PDF with tables in it → get a clean, <b>editable</b> <b>.xlsx</b> or <b>.csv</b> back. Built for the messy statements, reports, and exports other converters choke on. Fix any cell right in the preview before you download.</p>
+
+  <div class="drop" id="drop">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/><path d="M12 11v6"/><path d="m9 14 3-3 3 3"/></svg>
+    <div class="big">Drop your PDF here</div>
+    <div class="sm">or tap to choose a file · up to ~30 pages</div>
+    <input id="file" type="file" accept="application/pdf,.pdf" hidden>
+  </div>
+  <div style="text-align:center"><span class="priv">🔒 <b>Private</b> — your file is processed right here in your browser, never uploaded.</span></div>
+
+  <div id="status"></div>
+  <div class="hint" id="hint"></div>
+
+  <div class="out" id="out">
+    <div class="bar">
+      <button class="btn" id="dlxlsx">⬇︎ Download Excel (.xlsx)</button>
+      <button class="btn ghost" id="dlcsv">Download .csv</button>
+      <button class="btn ghost" id="copytsv">📋 Copy for Excel/Sheets</button>
+      <span class="meta" id="metaline"></span>
+    </div>
+    <label class="optline"><input type="checkbox" id="combine"> Combine all pages into one sheet</label>
+    <p class="editnote">✏️ Tip: cells are editable — click any cell to fix it before downloading.</p>
+    <div class="sheettabs" id="sheettabs"></div>
+    <div class="tablewrap"><table id="preview"></table></div>
+  </div>
+
+  <div class="foot">
+    Scanned PDF or a layout this didn't nail? That's where the AI version comes in — <a href="mailto:hello@reliabilityops.dev?subject=PDF%20to%20Excel%20help">send it to us</a> and we'll convert it for you.<br>
+    Built by <a href="https://reliabilityops.dev">reliabilityops.dev</a> — automation &amp; AI tooling for teams drowning in manual data work.
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+const $=s=>document.querySelector(s);
+const drop=$("#drop"),file=$("#file"),status=$("#status"),out=$("#out"),hint=$("#hint");
+let SHEETS=[],ACTIVE=0,BASENAME="converted";
+function setStatus(t,cls){status.textContent=t;status.className=cls||"";}
+function showHint(t){hint.textContent=t;hint.classList.add("show");}
+drop.onclick=()=>file.click();
+file.onchange=e=>{if(e.target.files[0])handle(e.target.files[0]);};
+["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over");}));
+drop.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f)handle(f);});
+
+async function handle(f){
+  hint.classList.remove("show");out.classList.remove("show");SHEETS=[];
+  if(f.type!=="application/pdf"&&!/\.pdf$/i.test(f.name)){setStatus("That's not a PDF — pick a .pdf file.","err");return;}
+  BASENAME=f.name.replace(/\.pdf$/i,"")||"converted";
+  setStatus("Reading "+f.name+"…","work");
+  try{
+    const buf=await f.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+    let totalCells=0;
+    for(let p=1;p<=pdf.numPages;p++){
+      setStatus("Extracting page "+p+" of "+pdf.numPages+"…","work");
+      const page=await pdf.getPage(p);
+      const tc=await page.getTextContent();
+      const grid=itemsToGrid(tc.items);
+      if(grid.length){SHEETS.push({name:"Page "+p,rows:grid});totalCells+=grid.length*(grid[0]?grid[0].length:0);}
+    }
+    if(!SHEETS.length){setStatus("No selectable text found.","err");showHint("This PDF looks scanned (it's an image, not text). Browser conversion can't read it — that needs OCR/AI. Email it to hello@reliabilityops.dev and we'll handle it.");return;}
+    ACTIVE=0;renderTabs();renderPreview();out.classList.add("show");
+    setStatus("✓ Done — "+SHEETS.length+" sheet"+(SHEETS.length>1?"s":"")+" ready. Check the preview, then download.","ok");
+  }catch(err){setStatus("Couldn't read that PDF — "+(err&&err.message||err),"err");}
+}
+
+// group text items into a row/column grid using their on-page x/y positions
+function itemsToGrid(items){
+  const its=items.filter(i=>i.str&&i.str.trim()).map(i=>({s:i.str.trim(),x:i.transform[4],y:i.transform[5],w:i.width||0}));
+  if(!its.length)return [];
+  // ---- rows: cluster by y (PDF y grows upward) ----
+  its.sort((a,b)=>b.y-a.y||a.x-b.x);
+  const heights=its.map(i=>i.transform&&i.transform[3]).filter(Boolean);
+  const rowTol=Math.max(3,(median(its.map(i=>i.y).map((y,idx,a)=>idx?Math.abs(a[idx-1]-y):0).filter(d=>d>1))||10)*0.5);
+  const rows=[];let cur=[],curY=null;
+  for(const it of its){
+    if(curY===null||Math.abs(it.y-curY)<=rowTol){cur.push(it);curY=curY===null?it.y:(curY*(cur.length-1)+it.y)/cur.length;}
+    else{rows.push(cur);cur=[it];curY=it.y;}
+  }
+  if(cur.length)rows.push(cur);
+  // ---- columns: cluster all x starts across the page ----
+  const xs=its.map(i=>i.x).sort((a,b)=>a-b);
+  const colTol=Math.max(6,(median(adjDiffs(xs).filter(d=>d>2))||18));
+  const bounds=[];let last=-1e9;
+  for(const x of xs){if(x-last>colTol){bounds.push(x);} last=x;}
+  // assign each item to nearest column-start
+  const colOf=x=>{let bi=0,bd=1e9;for(let i=0;i<bounds.length;i++){const d=Math.abs(x-bounds[i]);if(d<bd){bd=d;bi=i;}}return bi;};
+  const grid=rows.map(r=>{
+    const cells=new Array(bounds.length).fill("");
+    r.sort((a,b)=>a.x-b.x);
+    for(const it of r){const c=colOf(it.x);cells[c]=(cells[c]?cells[c]+" ":"")+it.s;}
+    return cells;
+  });
+  // drop empty trailing columns
+  let maxc=0;grid.forEach(r=>{for(let i=r.length-1;i>=0;i--){if(r[i]){if(i+1>maxc)maxc=i+1;break;}}});
+  return grid.map(r=>r.slice(0,maxc)).filter(r=>r.some(c=>c!==""));
+}
+function adjDiffs(a){const d=[];for(let i=1;i<a.length;i++)d.push(a[i]-a[i-1]);return d;}
+function median(a){if(!a.length)return 0;const s=a.slice().sort((x,y)=>x-y);const m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2;}
+
+function combined(){return SHEETS.reduce((a,s)=>a.concat(s.rows),[]);}
+// sheets to export/preview, honoring the "combine" toggle
+function outSheets(){return $("#combine").checked?[{name:"All pages",rows:combined()}]:SHEETS;}
+function renderTabs(){const sh=outSheets();if(ACTIVE>=sh.length)ACTIVE=0;
+  const el=$("#sheettabs");el.innerHTML=sh.length>1?sh.map((s,i)=>`<button class="stab ${i===ACTIVE?'on':''}" data-i="${i}">${s.name}</button>`).join(""):"";
+  el.querySelectorAll(".stab").forEach(b=>b.onclick=()=>{ACTIVE=+b.dataset.i;renderTabs();renderPreview();});}
+function curRows(){return outSheets()[ACTIVE].rows;}
+function renderPreview(){const rows=curRows().slice(0,300);
+  $("#preview").innerHTML=rows.map((r,ri)=>"<tr>"+r.map((c,ci)=>`<td contenteditable="true" data-r="${ri}" data-c="${ci}">`+esc(c)+"</td>").join("")+"</tr>").join("");
+  const sh=outSheets(),tot=sh.reduce((n,s)=>n+s.rows.length,0);
+  $("#metaline").textContent=tot+" rows · "+sh.length+" sheet"+(sh.length>1?"s":"");}
+// sync edits back into the underlying data (works whether combined or per-page)
+$("#preview").addEventListener("input",e=>{const td=e.target.closest("td");if(!td)return;
+  const r=+td.dataset.r,c=+td.dataset.c,val=td.innerText;
+  if($("#combine").checked){const flat=combined();let n=0;for(const s of SHEETS){if(r<n+s.rows.length){if(s.rows[r-n])s.rows[r-n][c]=val;break;}n+=s.rows.length;}}
+  else{const rows=SHEETS[ACTIVE]&&SHEETS[ACTIVE].rows;if(rows&&rows[r])rows[r][c]=val;}});
+$("#combine").addEventListener("change",()=>{ACTIVE=0;renderTabs();renderPreview();});
+function esc(s){return String(s==null?"":s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
+$("#dlxlsx").onclick=()=>{const wb=XLSX.utils.book_new();
+  outSheets().forEach((s,i)=>XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(s.rows),(s.name||("Sheet"+(i+1))).slice(0,31)));
+  XLSX.writeFile(wb,BASENAME+".xlsx");};
+$("#dlcsv").onclick=()=>{const rows=curRows();
+  const csv=rows.map(r=>r.map(c=>{const v=String(c==null?"":c);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));a.download=BASENAME+".csv";a.click();};
+$("#copytsv").onclick=async(e)=>{const rows=curRows();
+  const tsv=rows.map(r=>r.map(c=>String(c==null?"":c).replace(/\t/g," ")).join("\t")).join("\n");
+  try{await navigator.clipboard.writeText(tsv);e.target.textContent="✓ Copied — paste into Excel";setTimeout(()=>e.target.textContent="📋 Copy for Excel/Sheets",1800);}catch(_){setStatus("Copy failed — use the download instead.","err");}};
+</script>
+</body></html>
