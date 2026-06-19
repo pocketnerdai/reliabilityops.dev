@@ -29,6 +29,7 @@ export const METRICS = {
 
 // Navigation items
 export const NAV_ITEMS = [
+  { label: 'Secure AI', href: '/secure-ai' },
   { label: 'Blog', href: '/blog' },
   { label: 'Tools', href: '/tools' },
   { label: 'About', href: '/about' },

@@ -1,0 +1,302 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, AUTHOR_EMAIL } from '../consts';
+
+const pageTitle = `Secure AI in Your Boundary - ${SITE_TITLE}`;
+const pageDescription = "Private AI that runs inside your own infrastructure. Your data never leaves your boundary — architected by an SRE who runs production systems for millions of users.";
+
+const mailLink = `mailto:${AUTHOR_EMAIL}?subject=${encodeURIComponent('Secure AI — exploratory call')}&body=${encodeURIComponent('Hi Christopher,\n\nWe\'re interested in running AI on our own data without it leaving our boundary. A bit about us:\n\n- What we want the AI to do:\n- Where our data lives today (cloud / on-prem / which provider):\n- Rough timeline:\n\nThanks,')}`;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={pageDescription} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- HERO -->
+			<section class="relative overflow-hidden pt-32 pb-20">
+				<div class="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900"></div>
+				<div class="absolute top-0 left-1/2 -translate-x-1/2 w-[60rem] h-[40rem] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+				<div class="container mx-auto px-4 relative z-10">
+					<div class="max-w-3xl">
+						<div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-300 text-sm font-medium">
+							<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+							Private AI · Your infrastructure · Zero data egress
+						</div>
+						<h1 class="text-4xl md:text-6xl font-bold text-white leading-[1.05] mb-6">
+							AI on your data.<br />
+							<span class="text-emerald-400">Inside your own walls.</span>
+						</h1>
+						<p class="text-xl text-slate-300 leading-relaxed mb-8 max-w-2xl">
+							Most "AI solutions" ship your private documents to someone else's servers to get an answer back.
+							I build AI that runs <em class="text-white not-italic font-semibold">inside your boundary</em> — your cloud
+							account, your network, your control. The data your team asks about never leaves the building.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4">
+							<a href={mailLink} class="cta-button cta-primary group">
+								<span>Book a 20-minute call</span>
+								<svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+								</svg>
+							</a>
+							<a href="#how" class="cta-button cta-ghost">
+								<span>See how it works</span>
+							</a>
+						</div>
+						<p class="text-sm text-slate-500 mt-5">
+							No procurement marathon. One engineer, one scoped pilot, a working demo on your data.
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- THE PROBLEM -->
+			<section class="py-20 bg-slate-900/50">
+				<div class="container mx-auto px-4">
+					<div class="max-w-2xl mb-12">
+						<p class="text-emerald-400 font-semibold uppercase tracking-[0.18em] text-sm mb-3">The problem</p>
+						<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+							You want what ChatGPT does. You can't send it your data.
+						</h2>
+						<p class="text-lg text-slate-300 leading-relaxed">
+							Legal won't sign off. Compliance has questions. Your customers' records, your contracts, your
+							internal playbooks — none of it should be pasted into a public model. So the AI conversation stalls,
+							and your team keeps digging through wikis and Slack threads by hand.
+						</p>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
+						<div class="problem-card">
+							<div class="text-2xl mb-3">🔒</div>
+							<h3 class="text-white font-semibold mb-2">Data can't leave</h3>
+							<p class="text-slate-400 text-sm leading-relaxed">HIPAA, SOC 2, contracts, PII. Sending it to a third-party API is a non-starter — and rightly so.</p>
+						</div>
+						<div class="problem-card">
+							<div class="text-2xl mb-3">🌫️</div>
+							<h3 class="text-white font-semibold mb-2">Vendors are a black box</h3>
+							<p class="text-slate-400 text-sm leading-relaxed">"Trust us, it's secure." Where does the data sit? Who can see it? What gets logged? No clear answer.</p>
+						</div>
+						<div class="problem-card">
+							<div class="text-2xl mb-3">🧱</div>
+							<h3 class="text-white font-semibold mb-2">Knowledge stays buried</h3>
+							<p class="text-slate-400 text-sm leading-relaxed">The answers exist — in docs, tickets, runbooks. Nobody can find them fast, so the same questions get re-asked forever.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- THE OFFERING -->
+			<section id="how" class="py-20">
+				<div class="container mx-auto px-4">
+					<div class="max-w-2xl mb-12">
+						<p class="text-emerald-400 font-semibold uppercase tracking-[0.18em] text-sm mb-3">What I build</p>
+						<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+							A private answer engine over your own documents
+						</h2>
+						<p class="text-lg text-slate-300 leading-relaxed">
+							Point it at your knowledge — policies, contracts, support history, engineering docs — and your team asks
+							questions in plain English. It answers, with citations back to the source. The model and the data both
+							live in <em class="text-white not-italic font-semibold">your</em> environment. Nothing is sent to OpenAI, Anthropic, or anyone else
+							unless you explicitly decide it should be.
+						</p>
+					</div>
+
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl">
+						<div class="step-card">
+							<div class="step-num">01</div>
+							<h3 class="text-xl font-semibold text-white mb-3">It runs where you do</h3>
+							<p class="text-slate-300 text-sm leading-relaxed">
+								Your cloud account or an edge boundary you control (Cloudflare, AWS, on-prem). The whole pipeline —
+								retrieval, the model, the logs — sits inside a perimeter you own and can audit.
+							</p>
+						</div>
+						<div class="step-card">
+							<div class="step-num">02</div>
+							<h3 class="text-xl font-semibold text-white mb-3">It only knows your stuff</h3>
+							<p class="text-slate-300 text-sm leading-relaxed">
+								Answers are grounded in your documents and cite where they came from. No hallucinated policy, no
+								made-up numbers — if it's not in your source material, it says so.
+							</p>
+						</div>
+						<div class="step-card">
+							<div class="step-num">03</div>
+							<h3 class="text-xl font-semibold text-white mb-3">It's wired like production</h3>
+							<p class="text-slate-300 text-sm leading-relaxed">
+								Access controls, audit trails, monitoring, and a kill switch — built in from day one by someone whose
+								day job is keeping systems up and locked down.
+							</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- WHY ME -->
+			<section class="py-20 bg-slate-900/50">
+				<div class="container mx-auto px-4">
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+						<div>
+							<p class="text-emerald-400 font-semibold uppercase tracking-[0.18em] text-sm mb-3">Why me</p>
+							<h2 class="text-3xl md:text-4xl font-bold text-white mb-5">
+								Built by the person who runs the infrastructure
+							</h2>
+							<p class="text-lg text-slate-300 leading-relaxed mb-5">
+								I'm not an AI startup chasing a demo. I'm a military-trained Site Reliability Engineer with 15+ years
+								keeping production systems online and secure for millions of users. Security and uptime aren't a feature
+								I bolt on at the end — they're the whole job.
+							</p>
+							<p class="text-lg text-slate-300 leading-relaxed">
+								That means the AI I hand you is something you can actually put in front of auditors: a clear boundary,
+								real access controls, and an honest answer to "where does our data go?" — <span class="text-white font-semibold">nowhere it shouldn't.</span>
+							</p>
+						</div>
+						<div class="grid grid-cols-2 gap-4">
+							<div class="stat-tile">
+								<div class="stat-num">15+</div>
+								<div class="stat-label">Years running production SRE</div>
+							</div>
+							<div class="stat-tile">
+								<div class="stat-num">99.99%</div>
+								<div class="stat-label">Uptime track record</div>
+							</div>
+							<div class="stat-tile">
+								<div class="stat-num">0</div>
+								<div class="stat-label">Bytes of your data leaving your boundary</div>
+							</div>
+							<div class="stat-tile">
+								<div class="stat-num">1</div>
+								<div class="stat-label">Engineer accountable end-to-end</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- HOW WE START -->
+			<section class="py-20">
+				<div class="container mx-auto px-4">
+					<div class="max-w-2xl mb-12">
+						<p class="text-emerald-400 font-semibold uppercase tracking-[0.18em] text-sm mb-3">How we start</p>
+						<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">A scoped pilot, not a year-long project</h2>
+						<p class="text-lg text-slate-300 leading-relaxed">
+							We pick one painful question your team asks constantly, point the engine at the documents that answer it,
+							and stand up a working demo — in your environment — so you can see it on real data before committing to more.
+						</p>
+					</div>
+					<div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl">
+						<div class="phase-card">
+							<h3 class="text-white font-semibold mb-2">1 · Scope call</h3>
+							<p class="text-slate-400 text-sm leading-relaxed">20 minutes. We find the one use case worth proving and confirm where your data lives. Free.</p>
+						</div>
+						<div class="phase-card">
+							<h3 class="text-white font-semibold mb-2">2 · Pilot</h3>
+							<p class="text-slate-400 text-sm leading-relaxed">A fixed-scope build inside your boundary, on a slice of your real documents. You see it work before you scale it.</p>
+						</div>
+						<div class="phase-card">
+							<h3 class="text-white font-semibold mb-2">3 · Roll out</h3>
+							<p class="text-slate-400 text-sm leading-relaxed">Expand to more sources and teams, hardened and monitored like any system I'd put my name on.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- CTA -->
+			<section class="py-20 relative overflow-hidden">
+				<div class="absolute inset-0 bg-gradient-to-r from-emerald-600 via-emerald-500 to-cyan-600 animate-gradient"></div>
+				<div class="container mx-auto px-4 relative z-10">
+					<div class="max-w-3xl mx-auto text-center">
+						<h2 class="text-3xl md:text-5xl font-bold text-white mb-6">
+							Have data you can't send to the cloud?
+						</h2>
+						<p class="text-xl text-emerald-50 mb-10 leading-relaxed">
+							That's exactly the problem this solves. Tell me the question your team keeps asking — I'll show you
+							how it gets answered without your data ever leaving home.
+						</p>
+						<div class="flex flex-col sm:flex-row gap-4 justify-center">
+							<a href={mailLink} class="cta-button cta-on-green group">
+								<span>Book a 20-minute call</span>
+								<svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+								</svg>
+							</a>
+						</div>
+						<p class="text-emerald-100 text-sm mt-6">No pitch deck. Just a conversation with the engineer who'd build it.</p>
+					</div>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	.problem-card {
+		@apply bg-slate-800/40 border border-slate-700/50 rounded-xl p-6;
+		@apply transition-all duration-300 hover:border-slate-600;
+	}
+
+	.step-card {
+		@apply bg-slate-800/50 border border-slate-700/50 rounded-xl p-7;
+		@apply transition-all duration-300;
+		@apply hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/10 hover:-translate-y-1;
+	}
+
+	.step-num {
+		@apply text-emerald-400/80 font-bold text-sm tracking-[0.2em] mb-4;
+	}
+
+	.phase-card {
+		@apply bg-slate-800/40 border border-slate-700/50 rounded-xl p-6;
+		@apply border-l-2 border-l-emerald-500/60;
+	}
+
+	.stat-tile {
+		@apply bg-slate-800/60 border border-slate-700/50 rounded-xl p-6 text-center;
+	}
+
+	.stat-num {
+		@apply text-3xl font-bold text-emerald-400 mb-1;
+	}
+
+	.stat-label {
+		@apply text-slate-400 text-sm leading-snug;
+	}
+
+	.cta-button {
+		@apply inline-flex items-center justify-center px-8 py-4 rounded-lg font-semibold;
+		@apply transition-all duration-300 transform hover:scale-105;
+		@apply focus:outline-none focus:ring-4 focus:ring-emerald-500/40;
+	}
+
+	.cta-primary {
+		@apply bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-xl hover:shadow-emerald-500/30;
+	}
+
+	.cta-ghost {
+		@apply bg-transparent text-white border-2 border-slate-600 hover:border-emerald-400 hover:text-emerald-300;
+	}
+
+	.cta-on-green {
+		@apply bg-white text-emerald-700 hover:bg-emerald-50 shadow-xl;
+	}
+
+	@keyframes gradient {
+		0%, 100% { background-position: 0% 50%; }
+		50% { background-position: 100% 50%; }
+	}
+
+	.animate-gradient {
+		animation: gradient 8s ease infinite;
+		background-size: 200% 200%;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.animate-gradient,
+		.animate-pulse { animation: none !important; }
+		.cta-button:hover { transform: none; }
+	}
+</style>
