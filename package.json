@@ -16,7 +16,7 @@
     "@astrojs/sitemap": "^3.4.1",
     "@portabletext/to-html": "^2.0.14",
     "@portabletext/types": "^2.0.13",
-    "@sanity/astro": "^3.2.10",
+    "@sanity/astro": "^3.4.2",
     "@sanity/client": "^7.8.1",
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^4.1.1",
@@ -25,7 +25,7 @@
     "groq": "^4.1.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "sanity": "^4.1.1",
+    "sanity": "^6.3.0",
     "sharp": "^0.34.2"
   },
   "devDependencies": {
