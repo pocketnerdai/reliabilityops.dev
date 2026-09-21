@@ -213,8 +213,27 @@ const pageDescription = "Get in touch to discuss how AI-driven reliability can t
 					</div>
 				</div>
 			</section>
+
+			<!-- Cal.com inline booking — Christopher Whiten (cwhiten/quick-connect) -->
+			<section class="py-20 bg-slate-800">
+				<div class="container mx-auto px-4">
+					<div class="max-w-4xl mx-auto">
+						<div class="text-center mb-8">
+							<h2 class="text-3xl font-bold text-white mb-3">Book a Call</h2>
+							<p class="text-slate-300">Grab a 25-min Quick Connect — Mon, Tue, Thu, Fri &amp; Sat, 1:00–6:00pm MST.</p>
+						</div>
+						<div id="cal-inline-quick-connect" class="rounded-2xl overflow-hidden bg-white" style="min-height:600px;width:100%;"></div>
+					</div>
+				</div>
+			</section>
 		</main>
 		<Footer />
+		<script is:inline type="text/javascript">
+			(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+			Cal("init", "quick-connect", { origin: "https://cal.com" });
+			Cal.ns["quick-connect"]("inline", { elementOrSelector: "#cal-inline-quick-connect", calLink: "cwhiten/quick-connect", layout: "month_view" });
+			Cal.ns["quick-connect"]("ui", { hideEventTypeDetails: false, layout: "month_view" });
+		</script>
 	</body>
 </html>
 
