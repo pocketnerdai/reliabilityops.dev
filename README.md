@@ -1,3 +1,16 @@
+# ARCHIVED 2026-10-24
+
+This Astro site is retired. The live site https://reliabilityops.dev is served by the Cloudflare Pages project
+`reliabilityops-home` (source `~/Projects/reliabilityops-home`). The Pages project `reliabilityops-dev` is kept
+but serves only a 301 redirect to https://reliabilityops.dev (path kept); Git auto-deploys are disabled.
+
+- Last Astro production deployment (rollback id): `0f3a6076-6b04-4c66-8a76-9af9f9d5920f`
+- Archive tag: `archive-20261024`; source tarball: `~/agency-plans/archive/reliabilityops.dev-src-20261024.tgz`
+- `node_modules` removed (75 npm advisories, 4 critical). Reinstall with `npm ci` only for forensic use.
+- Deploy tooling now uses `~/.gc/tools/wrangler/node_modules/.bin/wrangler`.
+
+---
+
 # Astro Starter Kit: Blog
 
 ```sh
