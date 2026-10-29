@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Local env, secrets and build folders (repo screen 2026-10-28)
+.dev.vars
+.wrangler/
